@@ -7,6 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ProviderNodeRepo extends JpaRepository<ProviderNode, Long> {
-    Optional<ProviderNode> findByProviderIdAndNodeUuid(Long providerId, UUID nodeUuid);
+    Optional<ProviderNode> findByOwnerIdAndNodeUuid(Long ownerId, UUID nodeUuid);
     Optional<ProviderNode> findByNodeUuid(UUID nodeUuid);
 }

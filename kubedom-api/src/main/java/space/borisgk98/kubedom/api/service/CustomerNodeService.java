@@ -1,22 +1,53 @@
 package space.borisgk98.kubedom.api.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeCreationDto;
+import space.borisgk98.kubedom.api.exception.ModelNotFound;
+import space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper;
+import space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest;
+import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeCreationDto;
+import space.borisgk98.kubedom.api.model.entity.AppUser;
+import space.borisgk98.kubedom.api.model.entity.CustomerNode;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
+import space.borisgk98.kubedom.api.repo.CustomerNodeRepo;
+import space.borisgk98.kubedom.api.security.SecurityService;
 import space.borisgk98.kubedom.api.ws.WebSocketSender;
 
-@Service
-@RequiredArgsConstructor
-public class CustomerNodeService {
-    private final ProviderNodeService providerNodeService;
-    private final WebSocketSender webSocketSender;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
 
-    public void create(Long providerNodeId) {
-        ProviderNode providerNode = providerNodeService.read(providerNodeId);
+@Service
+public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long> {
+    @Autowired
+    private ProviderNodeService providerNodeService;
+    @Autowired
+    private WebSocketSender webSocketSender;
+    @Autowired
+    private CustomerNodeRepo customerNodeRepo;
+    @Autowired
+    private AppUserService appUserService;
+    @Autowired
+    private SecurityService securityService;
+    @Autowired
+    private ProviderNodeSearchMapper providerNodeSearchMapper;
+
+    public CustomerNodeService(JpaRepository<CustomerNode, Long> repository, EntityManager em, CriteriaBuilder cb) {
+        super(repository, em, cb);
+    }
+
+    public void create(CustomerNodeCreationRequest dto) {
+        ProviderNode providerNode = providerNodeService.search(providerNodeSearchMapper.unmap(dto))
+                .stream().findFirst()
+                .orElseThrow(ModelNotFound::new);
         if (providerNode.getWebSocketSession() == null) {
             return;
         }
-        webSocketSender.send(providerNode.getWebSocketSessionId(), new CustomerNodeCreationDto());
+        AppUser owner = securityService.getCurrAppUser();
+        CustomerNode customerNode = new CustomerNode()
+                .setProviderNode(providerNode)
+                .setOwner(owner);
+        customerNodeRepo.save(customerNode);
+        webSocketSender.send(providerNode.getWebSocketSessionId(), new WSCustomerNodeCreationDto());
     }
 }

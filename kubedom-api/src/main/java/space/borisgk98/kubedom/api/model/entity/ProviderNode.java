@@ -33,14 +33,14 @@ public class ProviderNode implements IEntity<Long> {
 
     @ManyToOne
     @JoinColumn(
-            name="provider_id"
+            name="owner_id"
 //            ,
 //            nullable=false
     )
-    private Provider provider;
+    private AppUser owner;
 
-    @Column(name = "provider_id", insertable = false, updatable = false)
-    private Long providerId;
+    @Column(name = "owner_id", insertable = false, updatable = false)
+    private Long ownerId;
 
     @Column(name = "node_uuid")
     private UUID nodeUuid;

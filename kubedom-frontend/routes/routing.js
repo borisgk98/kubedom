@@ -8,27 +8,23 @@ router.use('/provider.*', provider_middleware)
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
-});
-
-router.get('/logout', function(req, res, next) {
-    res.render('index');
+  res.render('homepage');
 });
 
 // router.get('/:page/:id', function(req, res, next) {
 //     res.render("m-" + req.params.page, req.params);
 // });
 
-router.get('/provider/signin\?', function(req, res, next) {
-    res.render('signin_provider');
+router.get('/signin\?', function(req, res, next) {
+    res.render('signin');
 });
 
-router.get('/provider/register\?', function(req, res, next) {
-    res.render('register_provider');
+router.get('/register\?', function(req, res, next) {
+    res.render('register');
 });
 
-router.get('/provider/homepage', function(req, res, next) {
-    res.render('provider_homepage');
+router.get('/homepage', function(req, res, next) {
+    res.render('homepage');
 });
 
 // Not found

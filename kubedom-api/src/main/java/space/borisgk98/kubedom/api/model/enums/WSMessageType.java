@@ -2,13 +2,13 @@ package space.borisgk98.kubedom.api.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeCreationDto;
+import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeCreationDto;
 
 @Getter
 @AllArgsConstructor
 public enum WSMessageType {
     ERROR(Exception.class),
-    CUSTOMER_NODE_CREATION(CustomerNodeCreationDto.class);
+    CUSTOMER_NODE_CREATION(WSCustomerNodeCreationDto.class);
 
     private Class mClass;
 

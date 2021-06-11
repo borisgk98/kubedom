@@ -3,13 +3,15 @@ package space.borisgk98.kubedom.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
 import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
-import space.borisgk98.kubedom.api.model.entity.Provider;
+import space.borisgk98.kubedom.api.model.entity.AppUser;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
 import space.borisgk98.kubedom.api.repo.ProviderNodeRepo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +19,7 @@ import java.util.UUID;
 public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long> {
 
     @Autowired
-    private ProviderService providerService;
+    private AppUserService appUserService;
 
     public ProviderNodeService(JpaRepository<ProviderNode, Long> repository, EntityManager em, CriteriaBuilder cb) {
         super(repository, em, cb);
@@ -30,17 +32,17 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
      * @return              успешная регистрация или нет
      */
     public boolean register(UUID providerToken, UUID nodeUuid) {
-        if (!providerService.existByToken(providerToken)) {
+        if (!appUserService.existByToken(providerToken)) {
             return false;
         }
-        Provider provider = providerService.findByToken(providerToken).get();
-        Optional<ProviderNode> existed = ((ProviderNodeRepo) repository).findByProviderIdAndNodeUuid(provider.getId(), nodeUuid);
+        AppUser appUser = appUserService.findByToken(providerToken).get();
+        Optional<ProviderNode> existed = ((ProviderNodeRepo) repository).findByOwnerIdAndNodeUuid(appUser.getId(), nodeUuid);
         if (existed.isPresent()) {
             return true;
         }
         ProviderNode newProviderNode = ProviderNode.builder()
-                .provider(provider)
-                .providerId(provider.getId())
+                .owner(appUser)
+                .ownerId(appUser.getId())
                 .nodeUuid(nodeUuid)
                 .build();
         repository.save(newProviderNode);
@@ -55,5 +57,10 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
     public void clearSession(UUID nodeUuid) {
         ((ProviderNodeRepo) repository).findByNodeUuid(nodeUuid)
                 .ifPresent(node -> repository.save(node.setWebSocketSession(null)));
+    }
+
+    // TODO продвинутый поиск
+    public List<ProviderNode> search(ProviderNodeSearchRequest unmap) {
+        return repository.findAll();
     }
 }
