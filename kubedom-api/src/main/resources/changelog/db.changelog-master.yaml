@@ -1,0 +1,5 @@
+databaseChangeLog:
+
+  # includeAll do nothing when run from jar or maven int tests. See also: https://liquibase.jira.com/browse/CORE-2863
+
+  - include: { relativeToChangelogFile: true, file: 1.0/db.changelog-1.0.yaml }

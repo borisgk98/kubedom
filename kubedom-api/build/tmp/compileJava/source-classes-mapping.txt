@@ -1,0 +1,87 @@
+space/borisgk98/kubedom/api/controller/TestController.java
+ space.borisgk98.kubedom.api.controller.TestController
+space/borisgk98/kubedom/api/repo/WebSocketSessionRepo.java
+ space.borisgk98.kubedom.api.repo.WebSocketSessionRepo
+space/borisgk98/kubedom/api/exception/ModelNotFound.java
+ space.borisgk98.kubedom.api.exception.ModelNotFound
+space/borisgk98/kubedom/api/utils/HttpUtils.java
+ space.borisgk98.kubedom.api.utils.HttpUtils
+space/borisgk98/kubedom/api/ws/handlers/HandlerDelegate.java
+ space.borisgk98.kubedom.api.ws.handlers.HandlerDelegate
+space/borisgk98/kubedom/api/model/entity/CurrWebSocketSession.java
+ space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession
+space/borisgk98/kubedom/api/config/SecurityConfig.java
+ space.borisgk98.kubedom.api.config.SecurityConfig
+space/borisgk98/kubedom/api/model/entity/Provider.java
+ space.borisgk98.kubedom.api.model.entity.Provider
+space/borisgk98/kubedom/api/security/SecurityService.java
+ space.borisgk98.kubedom.api.security.SecurityService
+space/borisgk98/kubedom/api/ApiApplication.java
+ space.borisgk98.kubedom.api.ApiApplication
+space/borisgk98/kubedom/api/ws/handlers/IHandler.java
+ space.borisgk98.kubedom.api.ws.handlers.IHandler
+space/borisgk98/kubedom/api/security/JwtConfigurer.java
+ space.borisgk98.kubedom.api.security.JwtConfigurer
+space/borisgk98/kubedom/api/ws/AuthHandshakeHandler.java
+ space.borisgk98.kubedom.api.ws.AuthHandshakeHandler
+space/borisgk98/kubedom/api/cosnt/AppUrls.java
+ space.borisgk98.kubedom.api.cosnt.AppUrls
+space/borisgk98/kubedom/api/cosnt/AppConst.java
+ space.borisgk98.kubedom.api.cosnt.AppConst
+space/borisgk98/kubedom/api/service/ICrudService.java
+ space.borisgk98.kubedom.api.service.ICrudService
+space/borisgk98/kubedom/api/ws/SessionManager.java
+ space.borisgk98.kubedom.api.ws.SessionManager
+space/borisgk98/kubedom/api/config/DataAccessConfiguration.java
+ space.borisgk98.kubedom.api.config.DataAccessConfiguration
+space/borisgk98/kubedom/api/security/ChatAuthenticationManager.java
+ space.borisgk98.kubedom.api.security.ChatAuthenticationManager
+space/borisgk98/kubedom/api/model/dto/ws/CustomerNodeCreationDto.java
+ space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeCreationDto
+ space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeCreationDto$CustomerNodeCreationDtoBuilder
+space/borisgk98/kubedom/api/config/WebSocketConfiguration.java
+ space.borisgk98.kubedom.api.config.WebSocketConfiguration
+space/borisgk98/kubedom/api/security/JwtTokenFilter.java
+ space.borisgk98.kubedom.api.security.JwtTokenFilter
+space/borisgk98/kubedom/api/exception/IllegalAspectTargetException.java
+ space.borisgk98.kubedom.api.exception.IllegalAspectTargetException
+space/borisgk98/kubedom/api/security/InvalidJwtAuthenticationException.java
+ space.borisgk98.kubedom.api.security.InvalidJwtAuthenticationException
+space/borisgk98/kubedom/api/service/AbstractCrudService.java
+ space.borisgk98.kubedom.api.service.AbstractCrudService
+space/borisgk98/kubedom/api/model/dto/CreateCustomerNodeDto.java
+ space.borisgk98.kubedom.api.model.dto.CreateCustomerNodeDto
+ space.borisgk98.kubedom.api.model.dto.CreateCustomerNodeDto$CreateCustomerNodeDtoBuilder
+space/borisgk98/kubedom/api/service/CustomerNodeService.java
+ space.borisgk98.kubedom.api.service.CustomerNodeService
+space/borisgk98/kubedom/api/model/dto/ws/WSMessageWrapper.java
+ space.borisgk98.kubedom.api.model.dto.ws.WSMessageWrapper
+space/borisgk98/kubedom/api/service/ProviderNodeService.java
+ space.borisgk98.kubedom.api.service.ProviderNodeService
+space/borisgk98/kubedom/api/security/JwtTokenProvider.java
+ space.borisgk98.kubedom.api.security.JwtTokenProvider
+space/borisgk98/kubedom/api/model/entity/IEntity.java
+ space.borisgk98.kubedom.api.model.entity.IEntity
+space/borisgk98/kubedom/api/model/entity/ProviderNode.java
+ space.borisgk98.kubedom.api.model.entity.ProviderNode
+ space.borisgk98.kubedom.api.model.entity.ProviderNode$ProviderNodeBuilder
+space/borisgk98/kubedom/api/controller/ProviderSecurityController.java
+ space.borisgk98.kubedom.api.controller.ProviderSecurityController
+space/borisgk98/kubedom/api/service/SessionService.java
+ space.borisgk98.kubedom.api.service.SessionService
+space/borisgk98/kubedom/api/repo/ProviderRepo.java
+ space.borisgk98.kubedom.api.repo.ProviderRepo
+space/borisgk98/kubedom/api/model/enums/WSMessageType.java
+ space.borisgk98.kubedom.api.model.enums.WSMessageType
+space/borisgk98/kubedom/api/ws/MessagesWebSocketHandler.java
+ space.borisgk98.kubedom.api.ws.MessagesWebSocketHandler
+space/borisgk98/kubedom/api/ws/WebSocketSender.java
+ space.borisgk98.kubedom.api.ws.WebSocketSender
+space/borisgk98/kubedom/api/model/dto/AuthenticationRequest.java
+ space.borisgk98.kubedom.api.model.dto.AuthenticationRequest
+space/borisgk98/kubedom/api/security/ChatUserDetailsService.java
+ space.borisgk98.kubedom.api.security.ChatUserDetailsService
+space/borisgk98/kubedom/api/repo/ProviderNodeRepo.java
+ space.borisgk98.kubedom.api.repo.ProviderNodeRepo
+space/borisgk98/kubedom/api/service/ProviderService.java
+ space.borisgk98.kubedom.api.service.ProviderService
