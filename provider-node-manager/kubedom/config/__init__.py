@@ -1,8 +1,8 @@
 import configparser
 import uuid
 import sys
+from kubedom.const import CONFIG_PATH
 
-CONFIG_PATH = '/home/boris/.kubedom/node.ini'
 __SECTION = 'configuration'
 __config = configparser.ConfigParser()
 __config.read(CONFIG_PATH)

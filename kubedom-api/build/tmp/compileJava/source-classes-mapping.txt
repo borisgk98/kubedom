@@ -1,5 +1,5 @@
-space/borisgk98/kubedom/api/security/KubedomUserDetailsService.java
- space.borisgk98.kubedom.api.security.KubedomUserDetailsService
+space/borisgk98/kubedom/api/controller/TestController.java
+ space.borisgk98.kubedom.api.controller.TestController
 space/borisgk98/kubedom/api/repo/WebSocketSessionRepo.java
  space.borisgk98.kubedom.api.repo.WebSocketSessionRepo
 space/borisgk98/kubedom/api/exception/ModelNotFound.java
@@ -10,8 +10,8 @@ space/borisgk98/kubedom/api/ws/handlers/HandlerDelegate.java
  space.borisgk98.kubedom.api.ws.handlers.HandlerDelegate
 space/borisgk98/kubedom/api/model/entity/CurrWebSocketSession.java
  space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession
-space/borisgk98/kubedom/api/repo/ProviderNodeRepo.java
- space.borisgk98.kubedom.api.repo.ProviderNodeRepo
+space/borisgk98/kubedom/api/security/KubedomUserDetailsService.java
+ space.borisgk98.kubedom.api.security.KubedomUserDetailsService
 space/borisgk98/kubedom/api/ApiApplication.java
  space.borisgk98.kubedom.api.ApiApplication
 space/borisgk98/kubedom/api/security/SecurityService.java
@@ -20,8 +20,8 @@ space/borisgk98/kubedom/api/ws/handlers/IHandler.java
  space.borisgk98.kubedom.api.ws.handlers.IHandler
 space/borisgk98/kubedom/api/controller/CustomerNodeController.java
  space.borisgk98.kubedom.api.controller.CustomerNodeController
-space/borisgk98/kubedom/api/controller/TestController.java
- space.borisgk98.kubedom.api.controller.TestController
+space/borisgk98/kubedom/api/security/JwtConfigurer.java
+ space.borisgk98.kubedom.api.security.JwtConfigurer
 space/borisgk98/kubedom/api/ws/AuthHandshakeHandler.java
  space.borisgk98.kubedom.api.ws.AuthHandshakeHandler
 space/borisgk98/kubedom/api/cosnt/AppUrls.java
@@ -39,8 +39,8 @@ space/borisgk98/kubedom/api/config/DataAccessConfiguration.java
  space.borisgk98.kubedom.api.config.DataAccessConfiguration
 space/borisgk98/kubedom/api/mapping/ProviderNodeSearchMapper.java
  space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper
-space/borisgk98/kubedom/api/config/WebSocketConfiguration.java
- space.borisgk98.kubedom.api.config.WebSocketConfiguration
+space/borisgk98/kubedom/api/repo/ProviderNodeRepo.java
+ space.borisgk98.kubedom.api.repo.ProviderNodeRepo
 space/borisgk98/kubedom/api/security/JwtTokenFilter.java
  space.borisgk98.kubedom.api.security.JwtTokenFilter
 space/borisgk98/kubedom/api/exception/IllegalAspectTargetException.java
@@ -95,7 +95,7 @@ space/borisgk98/kubedom/api/model/entity/AppUser.java
  space.borisgk98.kubedom.api.model.entity.AppUser
 space/borisgk98/kubedom/api/security/KubedomAuthenticationManager.java
  space.borisgk98.kubedom.api.security.KubedomAuthenticationManager
-space/borisgk98/kubedom/api/security/JwtConfigurer.java
- space.borisgk98.kubedom.api.security.JwtConfigurer
 space/borisgk98/kubedom/api/config/SecurityConfig.java
  space.borisgk98.kubedom.api.config.SecurityConfig
+space/borisgk98/kubedom/api/config/WebSocketConfiguration.java
+ space.borisgk98.kubedom.api.config.WebSocketConfiguration

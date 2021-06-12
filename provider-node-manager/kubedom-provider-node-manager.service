@@ -1,0 +1,14 @@
+[Unit]
+Description=Kubedom provider node manager
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=root
+ExecStart=/usr/bin/sh /opt/kubedom/provider-node-manager/start-service.sh
+
+[Install]
+WantedBy=multi-user.target

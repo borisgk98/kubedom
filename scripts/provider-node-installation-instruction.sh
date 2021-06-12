@@ -1,0 +1,1 @@
+wget -O - https://www.kubedom.borisgk.space/static/install-provider-node-manager.sh | sudo sh -
