@@ -3,3 +3,5 @@ bash~=0.6
 websockets~=9.1
 orjson~=3.5.1
 requests~=2.25.1
+ssh~=1.8.0
+paramiko~=2.7.2

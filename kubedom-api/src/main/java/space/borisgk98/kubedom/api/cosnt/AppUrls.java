@@ -9,5 +9,5 @@ public class AppUrls {
     public static final String REGISTER = "/register";
     public static final String LOGOUT = "/logout";
     public static final String CHECK = "/check";
-    public static final String CUSTOMER_NODE = "/customer-node/";
+    public static final String CUSTOMER_NODE = "/customer-node";
 }

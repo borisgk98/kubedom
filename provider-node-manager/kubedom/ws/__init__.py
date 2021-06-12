@@ -2,6 +2,8 @@ import orjson
 import requests as requests
 import websockets
 import os.path
+import paramiko as ssh
+import time
 
 import kubedom.config as CONFIG
 import kubedom.vboxapi.api as api
@@ -10,6 +12,13 @@ __MTYPE = 'type'
 __MDATA = 'data'
 
 __OVA_FILE_LOCATION = "/tmp/customer-node.ova"
+__CONFIG_PATH_LOCAL = "/tmp/config.json"
+__CONFIG_PATH_REMOTE = "/home/vm-provider/config.json"
+__VM_PROVIDER_LOGIN = "vm-provider"
+__VM_PROVIDER_PASSWORD = "vm-provider"
+__VM_HOST = 'localhost'
+__VM_PORT = 7722
+__MAX_RETRIES = 10
 
 async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> None:
     async for message in websocket:
@@ -17,11 +26,16 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
         wrapper = __parse_json(message)
         mtype = wrapper[__MTYPE]
         if mtype == 'CUSTOMER_NODE_CREATION':
+            print('Customer node creation start')
             dto = __parse_json(wrapper[__MDATA])
             ova_location = dto['ovaLocation']
             machine_name = dto['machineName']
             __download_and_save(ova_location)
             api.create_machine(__OVA_FILE_LOCATION, machine_name)
+            api.start(machine_name)
+            if not __copy_config(dto['customerNodeConfig']):
+                api.remove(machine_name)
+            print('Customer node creation finish successfully')
 
 
 async def consumer(hostname: str, port: int, path: str):
@@ -39,6 +53,29 @@ def __download_and_save(ova_location: str):
         return
     r = requests.get(ova_location, allow_redirects=True)
     open(__OVA_FILE_LOCATION, 'wb').write(r.content)
+
+
+def __copy_config(config: str):
+    open(__CONFIG_PATH_LOCAL, 'w').write(config)
+
+    retry = 0
+    host = __VM_HOST
+    port = __VM_PORT
+    remotepath = __CONFIG_PATH_REMOTE
+    localpath = __CONFIG_PATH_LOCAL
+    while retry <= __MAX_RETRIES:
+        try:
+            transport = ssh.Transport((host, port))
+            transport.connect(username=__VM_PROVIDER_LOGIN, password=__VM_PROVIDER_PASSWORD)
+            sftp = ssh.SFTPClient.from_transport(transport)
+            sftp.put(localpath, remotepath)
+            sftp.close()
+            transport.close()
+            break
+        except Exception:
+            retry += 1
+            time.sleep(5)
+    return retry <= __MAX_RETRIES
 
 
 def __parse_json(message: str):

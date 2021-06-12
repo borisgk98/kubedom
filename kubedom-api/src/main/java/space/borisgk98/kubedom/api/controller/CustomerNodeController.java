@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import space.borisgk98.kubedom.api.cosnt.AppConst;
 import space.borisgk98.kubedom.api.cosnt.AppUrls;
 import space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest;
 import space.borisgk98.kubedom.api.service.CustomerNodeService;
 
 @RestController
-@RequestMapping(AppUrls.CUSTOMER_NODE)
+@RequestMapping(AppConst.SERVER_PREFIX + AppUrls.CUSTOMER_NODE)
 @RequiredArgsConstructor
 public class CustomerNodeController {
 

@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -53,4 +54,15 @@ public class CustomerNode implements IEntity<Long> {
 
     @Column(name = "provider_node_id", insertable = false, updatable = false)
     private Long providerNodeId;
+
+    @OneToOne
+    @JoinColumn(
+            name="ws_session_id"
+//            ,
+//            nullable=false
+    )
+    private CurrWebSocketSession webSocketSession;
+
+    @Column(name = "ws_session_id", insertable = false, updatable = false)
+    private String webSocketSessionId;
 }

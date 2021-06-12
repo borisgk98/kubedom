@@ -18,4 +18,5 @@ public class WSCustomerNodeCreationDto {
     // TODO нормальные названия
     private String machineName = "VM:" + UUID.randomUUID().toString();
     private String ovaLocation;
+    private String customerNodeConfig;
 }

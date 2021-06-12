@@ -76,6 +76,25 @@ register_provider = function () {
     });
 }
 
+create_node = function () {
+    var data = {
+    };
+    const request_url = API_URL + "/customer-node";
+    console.log(request_url);
+    jQuery.ajax({
+        'type': 'POST',
+        'url': request_url,
+        'contentType': 'application/json',
+        'dataType': 'json',
+        data: JSON.stringify(data),
+        'success': async () => {
+            console.log("success")
+            redirect("/homepage");
+        },
+        error: log_error
+    });
+}
+
 check_auth = function () {
     const request_url = API_URL + "/check";
     console.log(request_url);

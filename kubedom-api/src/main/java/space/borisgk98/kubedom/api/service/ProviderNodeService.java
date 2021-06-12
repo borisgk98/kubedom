@@ -8,6 +8,7 @@ import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
 import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
 import space.borisgk98.kubedom.api.model.entity.AppUser;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
+import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
 import space.borisgk98.kubedom.api.repo.ProviderNodeRepo;
 
 import javax.persistence.EntityManager;
@@ -53,16 +54,22 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
 
     public void updateSession(UUID nodeUuid, CurrWebSocketSession webSocketSession) {
         ((ProviderNodeRepo) repository).findByNodeUuid(nodeUuid)
-                .ifPresent(node -> repository.save(node.setWebSocketSession(webSocketSession)));
+                .ifPresent(node -> repository.save(node
+                        .setWebSocketSession(webSocketSession)
+                        .setProviderNodeState(ProviderNodeState.ACTIVE)));
     }
 
     public void clearSession(UUID nodeUuid) {
         ((ProviderNodeRepo) repository).findByNodeUuid(nodeUuid)
-                .ifPresent(node -> repository.save(node.setWebSocketSession(null)));
+                .ifPresent(node -> repository.save(node
+                        .setWebSocketSession(null)
+                        .setProviderNodeState(ProviderNodeState.DETACHED)));
     }
 
     // TODO продвинутый поиск
     public List<ProviderNode> search(ProviderNodeSearchRequest searchRequest) {
-        return repository.findAll().stream().filter(providerNode -> providerNode.getWebSocketSessionId() != null).collect(Collectors.toList());
+        return repository.findAll().stream()
+                .filter(providerNode -> providerNode.getWebSocketSessionId() != null && ProviderNodeState.ACTIVE == providerNode.getProviderNodeState())
+                .collect(Collectors.toList());
     }
 }

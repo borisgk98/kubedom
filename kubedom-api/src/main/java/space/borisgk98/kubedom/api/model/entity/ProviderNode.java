@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,6 +47,10 @@ public class ProviderNode implements IEntity<Long> {
 
     @Column(name = "node_uuid")
     private UUID nodeUuid;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private ProviderNodeState providerNodeState;
 
     @OneToOne
     @JoinColumn(

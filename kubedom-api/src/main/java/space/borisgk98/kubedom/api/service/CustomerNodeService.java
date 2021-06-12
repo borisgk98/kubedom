@@ -1,5 +1,7 @@
 package space.borisgk98.kubedom.api.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import space.borisgk98.kubedom.api.exception.ModelNotFound;
 import space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper;
 import space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest;
+import space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeConfigDto;
 import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeCreationDto;
 import space.borisgk98.kubedom.api.model.entity.AppUser;
 import space.borisgk98.kubedom.api.model.entity.CustomerNode;
@@ -17,6 +20,7 @@ import space.borisgk98.kubedom.api.ws.WebSocketSender;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.transaction.Transactional;
 
 @Service
 public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long> {
@@ -32,6 +36,8 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     private SecurityService securityService;
     @Autowired
     private ProviderNodeSearchMapper providerNodeSearchMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Value("${app.ova-location}")
     private String ovaLocation;
@@ -40,6 +46,9 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         super(repository, em, cb);
     }
 
+    // TODO exception processing
+    @SneakyThrows
+    @Transactional
     public void create(CustomerNodeCreationRequest dto) {
         ProviderNode providerNode = providerNodeService.search(providerNodeSearchMapper.unmap(dto))
                 .stream().findFirst()
@@ -51,9 +60,12 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         CustomerNode customerNode = new CustomerNode()
                 .setProviderNode(providerNode)
                 .setOwner(owner);
-        customerNodeRepo.save(customerNode);
-        var customerNodeCreationDto = new WSCustomerNodeCreationDto();
-        customerNodeCreationDto.setOvaLocation(ovaLocation);
+        customerNode = customerNodeRepo.save(customerNode);
+        var customerNodeCreationDto = new WSCustomerNodeCreationDto()
+                .setOvaLocation(ovaLocation)
+                .setCustomerNodeConfig(objectMapper.writeValueAsString(new CustomerNodeConfigDto()
+                        .setCustomerNodeId(customerNode.getId())));
         webSocketSender.send(providerNode.getWebSocketSessionId(), customerNodeCreationDto);
+        // TODO получить положительный ответ от provider-node-manager
     }
 }

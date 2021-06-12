@@ -27,6 +27,10 @@ router.get('/homepage', function(req, res, next) {
     res.render('homepage');
 });
 
+router.get('/create-node', function(req, res, next) {
+    res.render('create-node');
+});
+
 // Not found
 router.get('*', function(req, res){
     // TODO not found page

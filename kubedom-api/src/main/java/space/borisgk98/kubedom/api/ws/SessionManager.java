@@ -7,6 +7,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import space.borisgk98.kubedom.api.cosnt.AppConst;
 import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
+import space.borisgk98.kubedom.api.model.enums.SessionType;
 import space.borisgk98.kubedom.api.service.ProviderNodeService;
 import space.borisgk98.kubedom.api.service.SessionService;
 import space.borisgk98.kubedom.api.utils.HttpUtils;
@@ -26,19 +27,27 @@ public class SessionManager {
 
     private static Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
-    public void add(WebSocketSession session) {
+    public void add(WebSocketSession session, SessionType sessionType) {
         sessions.put(session.getId(), session);
         CurrWebSocketSession newSession = sessionService.create(new CurrWebSocketSession().setId(session.getId()));
-        HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.PROVIDER_NODE_DEVICE_HEADER)
-                .map(UUID::fromString)
-                .ifPresent(nodeUuid -> providerNodeService.updateSession(nodeUuid, newSession));
+        switch (sessionType) {
+            case PROVIDER:
+                HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.PROVIDER_NODE_DEVICE_HEADER)
+                    .map(UUID::fromString)
+                    .ifPresent(nodeUuid -> providerNodeService.updateSession(nodeUuid, newSession));
+                break;
+        }
     }
 
-    public void remove(WebSocketSession session) {
+    public void remove(WebSocketSession session, SessionType sessionType) {
         sessions.remove(session.getId());
-        HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.PROVIDER_NODE_DEVICE_HEADER)
-                .map(UUID::fromString)
-                .ifPresent(providerNodeService::clearSession);
+        switch (sessionType) {
+            case PROVIDER:
+                HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.PROVIDER_NODE_DEVICE_HEADER)
+                        .map(UUID::fromString)
+                        .ifPresent(providerNodeService::clearSession);
+                break;
+        }
         sessionService.removeById(session.getId());
     }
 

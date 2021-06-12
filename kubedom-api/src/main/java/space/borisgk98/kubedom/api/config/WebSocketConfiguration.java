@@ -7,18 +7,18 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import space.borisgk98.kubedom.api.cosnt.AppConst;
 import space.borisgk98.kubedom.api.cosnt.AppUrls;
-import space.borisgk98.kubedom.api.ws.AuthHandshakeHandler;
-import space.borisgk98.kubedom.api.ws.MessagesWebSocketHandler;
+import space.borisgk98.kubedom.api.ws.ProviderAuthHandshakeHandler;
+import space.borisgk98.kubedom.api.ws.ProviderMessagesWebSocketHandler;
 
 @Configuration
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
     @Autowired
-    private MessagesWebSocketHandler messagesWebSocketHandler;
+    private ProviderMessagesWebSocketHandler messagesWebSocketHandler;
 
     @Autowired
-    private AuthHandshakeHandler authHandshakeHandler;
+    private ProviderAuthHandshakeHandler authHandshakeHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
