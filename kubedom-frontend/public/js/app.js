@@ -5,16 +5,16 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-redirect = function (url) {
+redirect = async function (url) {
     window.location.href = url
 }
 
-log_error = (xhr, textStatus, jqXHR) => {
+log_error = async (xhr, textStatus, jqXHR) => {
     console.log("ERROR")
     console.log(xhr.status);
 }
 
-logout = function () {
+logout = async function () {
     const request_url = API_URL + "/logout"
     console.log(request_url)
     jQuery.ajax({
@@ -30,7 +30,7 @@ logout = function () {
     });
 }
 
-signin_provider = function () {
+signin_provider = async function () {
     var login = $("#provider_login").val();
     var password = $("#provider_password").val();
     var data = {
@@ -53,7 +53,7 @@ signin_provider = function () {
     });
 }
 
-register_provider = function () {
+register_provider = async function () {
     var login = $("#provider_login").val();
     var password = $("#provider_password").val();
     var data = {
@@ -76,7 +76,7 @@ register_provider = function () {
     });
 }
 
-create_node = function () {
+create_node = async function () {
     var data = {
     };
     const request_url = API_URL + "/customer-node";
@@ -95,7 +95,7 @@ create_node = function () {
     });
 }
 
-check_auth = function () {
+check_auth = async function () {
     const request_url = API_URL + "/check";
     console.log(request_url);
     jQuery.ajax({
@@ -110,4 +110,25 @@ check_auth = function () {
             500: log_error
         }
     });
+}
+
+async function load_homepage() {
+    console.log("load_homepage()")
+    const request_url = API_URL + "/app-user/current";
+    console.log(request_url);
+    let response = await jQuery.ajax({
+        'type': 'GET',
+        'url': request_url,
+        'contentType': 'application/json',
+        'dataType': 'json'
+    });
+    jQuery("#user-login").text(response['login'])
+}
+
+async function load_page(loader) {
+    console.log("load_page start")
+    await loader();
+    console.log("loader done")
+    jQuery("#spinner").hide()
+    jQuery("#content").show()
 }

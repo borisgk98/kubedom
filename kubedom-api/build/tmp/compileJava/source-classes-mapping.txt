@@ -6,13 +6,18 @@ space/borisgk98/kubedom/api/ws/handlers/HandlerDelegate.java
  space.borisgk98.kubedom.api.ws.handlers.HandlerDelegate
 space/borisgk98/kubedom/api/model/enums/SessionType.java
  space.borisgk98.kubedom.api.model.enums.SessionType
-space/borisgk98/kubedom/api/security/KubedomUserDetailsService.java
- space.borisgk98.kubedom.api.security.KubedomUserDetailsService
+space/borisgk98/kubedom/api/controller/CustomerNodeController.java
+ space.borisgk98.kubedom.api.controller.CustomerNodeController
+space/borisgk98/kubedom/api/mapping/AppUserFullMapper.java
+ space.borisgk98.kubedom.api.mapping.AppUserFullMapper
 space/borisgk98/kubedom/api/cosnt/AppConst.java
  space.borisgk98.kubedom.api.cosnt.AppConst
 space/borisgk98/kubedom/api/ws/SessionManager.java
  space.borisgk98.kubedom.api.ws.SessionManager
  space.borisgk98.kubedom.api.ws.SessionManager$1
+space/borisgk98/kubedom/api/model/dto/rest/AppUserFullDto.java
+ space.borisgk98.kubedom.api.model.dto.rest.AppUserFullDto
+ space.borisgk98.kubedom.api.model.dto.rest.AppUserFullDto$AppUserFullDtoBuilder
 space/borisgk98/kubedom/api/config/DataAccessConfiguration.java
  space.borisgk98.kubedom.api.config.DataAccessConfiguration
 space/borisgk98/kubedom/api/exception/IllegalAspectTargetException.java
@@ -63,8 +68,8 @@ space/borisgk98/kubedom/api/ws/handlers/IHandler.java
  space.borisgk98.kubedom.api.ws.handlers.IHandler
 space/borisgk98/kubedom/api/ws/ProviderAuthHandshakeHandler.java
  space.borisgk98.kubedom.api.ws.ProviderAuthHandshakeHandler
-space/borisgk98/kubedom/api/security/JwtConfigurer.java
- space.borisgk98.kubedom.api.security.JwtConfigurer
+space/borisgk98/kubedom/api/security/KubedomUserDetailsService.java
+ space.borisgk98.kubedom.api.security.KubedomUserDetailsService
 space/borisgk98/kubedom/api/cosnt/AppUrls.java
  space.borisgk98.kubedom.api.cosnt.AppUrls
 space/borisgk98/kubedom/api/service/ICrudService.java
@@ -72,14 +77,18 @@ space/borisgk98/kubedom/api/service/ICrudService.java
 space/borisgk98/kubedom/api/model/dto/rest/CustomerNodeCreationRequest.java
  space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest
  space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest$CustomerNodeCreationRequestBuilder
+space/borisgk98/kubedom/api/controller/ExceptionHandlerAdvice.java
+ space.borisgk98.kubedom.api.controller.ExceptionHandlerAdvice
 space/borisgk98/kubedom/api/ws/ProviderMessagesWebSocketHandler.java
  space.borisgk98.kubedom.api.ws.ProviderMessagesWebSocketHandler
 space/borisgk98/kubedom/api/mapping/ProviderNodeSearchMapper.java
  space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper
+space/borisgk98/kubedom/api/controller/AppUserController.java
+ space.borisgk98.kubedom.api.controller.AppUserController
 space/borisgk98/kubedom/api/config/WebSocketConfiguration.java
  space.borisgk98.kubedom.api.config.WebSocketConfiguration
-space/borisgk98/kubedom/api/security/JwtTokenFilter.java
- space.borisgk98.kubedom.api.security.JwtTokenFilter
+space/borisgk98/kubedom/api/model/enums/CustomerNodeType.java
+ space.borisgk98.kubedom.api.model.enums.CustomerNodeType
 space/borisgk98/kubedom/api/model/dto/rest/ProviderNodeSearchRequest.java
  space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest
 space/borisgk98/kubedom/api/service/CustomerNodeService.java
@@ -103,7 +112,7 @@ space/borisgk98/kubedom/api/repo/ProviderRepo.java
  space.borisgk98.kubedom.api.repo.ProviderRepo
 space/borisgk98/kubedom/api/ws/WebSocketSender.java
  space.borisgk98.kubedom.api.ws.WebSocketSender
-space/borisgk98/kubedom/api/model/enums/CustomerNodeType.java
- space.borisgk98.kubedom.api.model.enums.CustomerNodeType
-space/borisgk98/kubedom/api/controller/CustomerNodeController.java
- space.borisgk98.kubedom.api.controller.CustomerNodeController
+space/borisgk98/kubedom/api/security/JwtConfigurer.java
+ space.borisgk98.kubedom.api.security.JwtConfigurer
+space/borisgk98/kubedom/api/security/JwtTokenFilter.java
+ space.borisgk98.kubedom.api.security.JwtTokenFilter
