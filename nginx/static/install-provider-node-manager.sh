@@ -32,7 +32,6 @@ cp kubedom-provider-node-manager.service /etc/systemd/system/kubedom-provider-no
 mkdir /etc/kubedom
 cp config.ini /etc/kubedom/config.ini
 mkdir /var/log/kubedom
-mkdir /var/log/kubedom
 echo '\n'
 
 # TODO install to python virtualenv
