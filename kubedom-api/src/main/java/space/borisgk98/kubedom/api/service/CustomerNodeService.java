@@ -1,6 +1,7 @@
 package space.borisgk98.kubedom.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import space.borisgk98.kubedom.api.exception.ModelNotFound;
@@ -32,6 +33,9 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     @Autowired
     private ProviderNodeSearchMapper providerNodeSearchMapper;
 
+    @Value("${app.ova-location}")
+    private String ovaLocation;
+
     public CustomerNodeService(JpaRepository<CustomerNode, Long> repository, EntityManager em, CriteriaBuilder cb) {
         super(repository, em, cb);
     }
@@ -48,6 +52,8 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
                 .setProviderNode(providerNode)
                 .setOwner(owner);
         customerNodeRepo.save(customerNode);
-        webSocketSender.send(providerNode.getWebSocketSessionId(), new WSCustomerNodeCreationDto());
+        var customerNodeCreationDto = new WSCustomerNodeCreationDto();
+        customerNodeCreationDto.setOvaLocation(ovaLocation);
+        webSocketSender.send(providerNode.getWebSocketSessionId(), customerNodeCreationDto);
     }
 }

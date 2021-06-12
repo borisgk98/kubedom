@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,5 +15,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class WSCustomerNodeCreationDto {
     private Integer cpuCount;
-    private String machineName;
+    // TODO нормальные названия
+    private String machineName = "VM:" + UUID.randomUUID().toString();
+    private String ovaLocation;
 }

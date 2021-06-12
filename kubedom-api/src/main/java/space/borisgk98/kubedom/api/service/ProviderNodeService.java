@@ -1,6 +1,7 @@
 package space.borisgk98.kubedom.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
@@ -14,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long> {
@@ -60,7 +62,7 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
     }
 
     // TODO продвинутый поиск
-    public List<ProviderNode> search(ProviderNodeSearchRequest unmap) {
-        return repository.findAll();
+    public List<ProviderNode> search(ProviderNodeSearchRequest searchRequest) {
+        return repository.findAll().stream().filter(providerNode -> providerNode.getWebSocketSessionId() != null).collect(Collectors.toList());
     }
 }

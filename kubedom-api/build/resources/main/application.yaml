@@ -33,3 +33,6 @@ spring:
 
 security:
   enabled: false
+
+app:
+  ova-location: "https://www.kubedom.borisgk.space/static/customer-node.ova"

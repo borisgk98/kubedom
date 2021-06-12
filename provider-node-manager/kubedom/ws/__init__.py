@@ -1,5 +1,7 @@
 import orjson
+import requests as requests
 import websockets
+import os.path
 
 import kubedom.config as CONFIG
 import kubedom.vboxapi.api as api
@@ -7,16 +9,19 @@ import kubedom.vboxapi.api as api
 __MTYPE = 'type'
 __MDATA = 'data'
 
-__OVA_LOCATION = "/home/boris/Documents/Ubuntu_k8s_node_1.ova"
-__MACHINE_NAME = 'test'
+__OVA_FILE_LOCATION = "/tmp/customer-node.ova"
 
 async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> None:
     async for message in websocket:
         print(f"Consume message\n:{message}")
-        dto = __parse_message(message)
-        mtype = dto[__MTYPE]
+        wrapper = __parse_json(message)
+        mtype = wrapper[__MTYPE]
         if mtype == 'CUSTOMER_NODE_CREATION':
-            api.create_machine(__OVA_LOCATION, __MACHINE_NAME)
+            dto = __parse_json(wrapper[__MDATA])
+            ova_location = dto['ovaLocation']
+            machine_name = dto['machineName']
+            __download_and_save(ova_location)
+            api.create_machine(__OVA_FILE_LOCATION, machine_name)
 
 
 async def consumer(hostname: str, port: int, path: str):
@@ -29,5 +34,12 @@ async def consumer(hostname: str, port: int, path: str):
         await consumer_handler(websocket)
 
 
-def __parse_message(message: str):
+def __download_and_save(ova_location: str):
+    if os.path.isfile(__OVA_FILE_LOCATION):
+        return
+    r = requests.get(ova_location, allow_redirects=True)
+    open(__OVA_FILE_LOCATION, 'wb').write(r.content)
+
+
+def __parse_json(message: str):
     return orjson.loads(message)

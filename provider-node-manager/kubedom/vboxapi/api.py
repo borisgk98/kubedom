@@ -2,10 +2,10 @@ import virtualbox
 from bash import bash
 
 vbox = virtualbox.VirtualBox()
-__MACHINE_INNER_NAME__ = 'Ubuntu_k8s_node_1'
+__MACHINE_INNER_NAME__ = 'customer-node'
 
 
-def create_machine(ova_location, machine_name, inner_name = __MACHINE_INNER_NAME__):
+def create_machine(ova_location, machine_name, inner_name=__MACHINE_INNER_NAME__):
     print("Create machine %s" % machine_name)
 
     # Create new IAppliance and read the exported machine
@@ -16,7 +16,7 @@ def create_machine(ova_location, machine_name, inner_name = __MACHINE_INNER_NAME
     # TODO set custom properties
     # Extract the IVirtualSystemDescription object
     # for 'ubuntu' and set its name to 'foobar' and cpu '2'.
-    desc = appliance.find_description(inner_name)
+    desc = appliance.find_description('customer-node')
     desc.set_name(machine_name)
     # desc.set_cpu('2')
 
