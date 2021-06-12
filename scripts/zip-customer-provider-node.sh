@@ -1,0 +1,1 @@
+zip -r -9 ../nginx/static/provider-node-manager.zip ../provider-node-manager/kubedom ../provider-node-manager/main.py ../provider-node-manager/requirements.txt
