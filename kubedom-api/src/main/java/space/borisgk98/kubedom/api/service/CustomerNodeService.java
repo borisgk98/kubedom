@@ -109,6 +109,6 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         ProviderNode providerNode = customerNode.getProviderNode();
         webSocketSender.send(providerNode.getWebSocketSessionId(), new WSCustomerNodeRemovingDto()
                 .setMachineName(customerNode.getMachineName()));
-//        repository.delete(customerNode);
+        repository.delete(customerNode);
     }
 }

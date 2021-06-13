@@ -60,9 +60,12 @@ async def consumer(hostname: str, port: int, path: str):
 
 def __download_and_save(ova_location: str):
     if os.path.isfile(__OVA_FILE_LOCATION):
+        print(f"Use file from cache ({__OVA_FILE_LOCATION})")
         return
+    print("Download ova image")
     r = requests.get(ova_location, allow_redirects=True)
     open(__OVA_FILE_LOCATION, 'wb').write(r.content)
+    print("Download finished")
 
 
 def __copy_config(config: str):
