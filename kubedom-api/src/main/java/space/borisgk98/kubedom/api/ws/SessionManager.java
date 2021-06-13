@@ -2,12 +2,14 @@ package space.borisgk98.kubedom.api.ws;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import space.borisgk98.kubedom.api.cosnt.AppConst;
 import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
 import space.borisgk98.kubedom.api.model.enums.SessionType;
+import space.borisgk98.kubedom.api.service.CustomerNodeService;
 import space.borisgk98.kubedom.api.service.ProviderNodeService;
 import space.borisgk98.kubedom.api.service.SessionService;
 import space.borisgk98.kubedom.api.utils.HttpUtils;
@@ -19,11 +21,14 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@RequiredArgsConstructor
 public class SessionManager {
 
-    private final SessionService sessionService;
-    private final ProviderNodeService providerNodeService;
+    @Autowired
+    private SessionService sessionService;
+    @Autowired
+    private ProviderNodeService providerNodeService;
+    @Autowired
+    private CustomerNodeService customerNodeService;
 
     private static Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
@@ -36,6 +41,11 @@ public class SessionManager {
                     .map(UUID::fromString)
                     .ifPresent(nodeUuid -> providerNodeService.updateSession(nodeUuid, newSession));
                 break;
+            case CUSTOMER:
+                HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.CUSTOMER_NODE_DEVICE_HEADER)
+                        .map(Long::valueOf)
+                        .ifPresent(nodeUuid -> customerNodeService.updateSession(nodeUuid, newSession));
+                break;
         }
     }
 
@@ -46,6 +56,11 @@ public class SessionManager {
                 HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.PROVIDER_NODE_DEVICE_HEADER)
                         .map(UUID::fromString)
                         .ifPresent(providerNodeService::clearSession);
+                break;
+            case CUSTOMER:
+                HttpUtils.getHeader(session.getHandshakeHeaders(), AppConst.CUSTOMER_NODE_DEVICE_HEADER)
+                        .map(Long::valueOf)
+                        .ifPresent(customerNodeService::clearSession);
                 break;
         }
         sessionService.removeById(session.getId());

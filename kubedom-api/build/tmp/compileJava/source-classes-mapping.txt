@@ -34,9 +34,6 @@ space/borisgk98/kubedom/api/security/JwtTokenProvider.java
  space.borisgk98.kubedom.api.security.JwtTokenProvider
 space/borisgk98/kubedom/api/mapping/IMapper.java
  space.borisgk98.kubedom.api.mapping.IMapper
-space/borisgk98/kubedom/api/model/dto/ws/CustomerNodeConfigDto.java
- space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeConfigDto
- space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeConfigDto$CustomerNodeConfigDtoBuilder
 space/borisgk98/kubedom/api/model/enums/WSMessageType.java
  space.borisgk98.kubedom.api.model.enums.WSMessageType
 space/borisgk98/kubedom/api/model/dto/ws/WSCustomerNodeCreationDto.java
@@ -58,18 +55,20 @@ space/borisgk98/kubedom/api/exception/ModelNotFound.java
  space.borisgk98.kubedom.api.exception.ModelNotFound
 space/borisgk98/kubedom/api/model/entity/CurrWebSocketSession.java
  space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession
-space/borisgk98/kubedom/api/config/SecurityConfig.java
- space.borisgk98.kubedom.api.config.SecurityConfig
+space/borisgk98/kubedom/api/security/KubedomUserDetailsService.java
+ space.borisgk98.kubedom.api.security.KubedomUserDetailsService
 space/borisgk98/kubedom/api/ApiApplication.java
  space.borisgk98.kubedom.api.ApiApplication
 space/borisgk98/kubedom/api/security/SecurityService.java
  space.borisgk98.kubedom.api.security.SecurityService
 space/borisgk98/kubedom/api/ws/handlers/IHandler.java
  space.borisgk98.kubedom.api.ws.handlers.IHandler
+space/borisgk98/kubedom/api/ws/CustomerAuthHandshakeHandler.java
+ space.borisgk98.kubedom.api.ws.CustomerAuthHandshakeHandler
 space/borisgk98/kubedom/api/ws/ProviderAuthHandshakeHandler.java
  space.borisgk98.kubedom.api.ws.ProviderAuthHandshakeHandler
-space/borisgk98/kubedom/api/security/KubedomUserDetailsService.java
- space.borisgk98.kubedom.api.security.KubedomUserDetailsService
+space/borisgk98/kubedom/api/security/JwtConfigurer.java
+ space.borisgk98.kubedom.api.security.JwtConfigurer
 space/borisgk98/kubedom/api/cosnt/AppUrls.java
  space.borisgk98.kubedom.api.cosnt.AppUrls
 space/borisgk98/kubedom/api/service/ICrudService.java
@@ -87,16 +86,21 @@ space/borisgk98/kubedom/api/controller/AppUserController.java
  space.borisgk98.kubedom.api.controller.AppUserController
 space/borisgk98/kubedom/api/config/WebSocketConfiguration.java
  space.borisgk98.kubedom.api.config.WebSocketConfiguration
-space/borisgk98/kubedom/api/model/enums/CustomerNodeType.java
- space.borisgk98.kubedom.api.model.enums.CustomerNodeType
+space/borisgk98/kubedom/api/security/JwtTokenFilter.java
+ space.borisgk98.kubedom.api.security.JwtTokenFilter
 space/borisgk98/kubedom/api/model/dto/rest/ProviderNodeSearchRequest.java
  space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest
-space/borisgk98/kubedom/api/service/CustomerNodeService.java
- space.borisgk98.kubedom.api.service.CustomerNodeService
 space/borisgk98/kubedom/api/service/AppUserService.java
  space.borisgk98.kubedom.api.service.AppUserService
+space/borisgk98/kubedom/api/service/CustomerNodeService.java
+ space.borisgk98.kubedom.api.service.CustomerNodeService
+space/borisgk98/kubedom/api/model/dto/ws/WSCustomerNodeConfigDto.java
+ space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeConfigDto
+ space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeConfigDto$WSCustomerNodeConfigDtoBuilder
 space/borisgk98/kubedom/api/model/dto/ws/WSMessageWrapper.java
  space.borisgk98.kubedom.api.model.dto.ws.WSMessageWrapper
+space/borisgk98/kubedom/api/ws/CustomerMessagesWebSocketHandler.java
+ space.borisgk98.kubedom.api.ws.CustomerMessagesWebSocketHandler
 space/borisgk98/kubedom/api/controller/SecurityController.java
  space.borisgk98.kubedom.api.controller.SecurityController
 space/borisgk98/kubedom/api/model/entity/IEntity.java
@@ -112,7 +116,9 @@ space/borisgk98/kubedom/api/repo/ProviderRepo.java
  space.borisgk98.kubedom.api.repo.ProviderRepo
 space/borisgk98/kubedom/api/ws/WebSocketSender.java
  space.borisgk98.kubedom.api.ws.WebSocketSender
-space/borisgk98/kubedom/api/security/JwtConfigurer.java
- space.borisgk98.kubedom.api.security.JwtConfigurer
-space/borisgk98/kubedom/api/security/JwtTokenFilter.java
- space.borisgk98.kubedom.api.security.JwtTokenFilter
+space/borisgk98/kubedom/api/model/enums/CustomerNodeType.java
+ space.borisgk98.kubedom.api.model.enums.CustomerNodeType
+space/borisgk98/kubedom/api/model/enums/CustomerNodeState.java
+ space.borisgk98.kubedom.api.model.enums.CustomerNodeState
+space/borisgk98/kubedom/api/config/SecurityConfig.java
+ space.borisgk98.kubedom.api.config.SecurityConfig

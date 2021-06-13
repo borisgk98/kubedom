@@ -3,6 +3,7 @@ package space.borisgk98.kubedom.api.model.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import space.borisgk98.kubedom.api.model.enums.CustomerNodeState;
 import space.borisgk98.kubedom.api.model.enums.CustomerNodeType;
 
 import javax.persistence.Column;
@@ -54,6 +55,10 @@ public class CustomerNode implements IEntity<Long> {
 
     @Column(name = "provider_node_id", insertable = false, updatable = false)
     private Long providerNodeId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "node_state")
+    private CustomerNodeState customerNodeState;
 
     @OneToOne
     @JoinColumn(

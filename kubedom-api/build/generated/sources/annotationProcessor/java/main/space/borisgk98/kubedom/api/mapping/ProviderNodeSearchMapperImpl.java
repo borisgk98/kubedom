@@ -7,7 +7,7 @@ import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-06-13T00:24:12+0300",
+    date = "2021-06-13T13:50:31+0300",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.0.2.jar, environment: Java 15.0.2 (N/A)"
 )
 @Component

@@ -8,5 +8,6 @@ public class AppConst {
     public static final String AUTH_HEADER = "Authorization";
     public static final String PROVIDER_NODE_AUTH_HEADER = "Provider-node-token";
     public static final String PROVIDER_NODE_DEVICE_HEADER = "Provider-node-device-uuid";
+    public static final String CUSTOMER_NODE_DEVICE_HEADER = "Customer-node-device-uuid";
     public static final String WS = "/ws";
 }

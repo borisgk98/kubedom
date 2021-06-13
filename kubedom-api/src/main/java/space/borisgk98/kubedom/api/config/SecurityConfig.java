@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(AppConst.SERVER_PREFIX + AppUrls.LOGIN).permitAll()
                 .antMatchers(AppConst.SERVER_PREFIX + AppUrls.REGISTER).permitAll()
                 .antMatchers(AppConst.SERVER_PREFIX + AppConst.WS + AppUrls.PROVIDER).permitAll()
+                .antMatchers(AppConst.SERVER_PREFIX + AppConst.WS + AppUrls.CUSTOMER).permitAll()
                 .antMatchers(AppConst.SERVER_PREFIX + "/test").permitAll()
                 .anyRequest().authenticated().and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

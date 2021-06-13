@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import space.borisgk98.kubedom.api.exception.ModelNotFound;
 import space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper;
 import space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest;
-import space.borisgk98.kubedom.api.model.dto.ws.CustomerNodeConfigDto;
+import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeConfigDto;
 import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeCreationDto;
 import space.borisgk98.kubedom.api.model.entity.AppUser;
+import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
 import space.borisgk98.kubedom.api.model.entity.CustomerNode;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
+import space.borisgk98.kubedom.api.model.enums.CustomerNodeState;
 import space.borisgk98.kubedom.api.repo.CustomerNodeRepo;
 import space.borisgk98.kubedom.api.security.SecurityService;
 import space.borisgk98.kubedom.api.ws.WebSocketSender;
@@ -63,9 +65,30 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         customerNode = customerNodeRepo.save(customerNode);
         var customerNodeCreationDto = new WSCustomerNodeCreationDto()
                 .setOvaLocation(ovaLocation)
-                .setCustomerNodeConfig(objectMapper.writeValueAsString(new CustomerNodeConfigDto()
+                .setCustomerNodeConfig(objectMapper.writeValueAsString(new WSCustomerNodeConfigDto()
                         .setCustomerNodeId(customerNode.getId())));
         webSocketSender.send(providerNode.getWebSocketSessionId(), customerNodeCreationDto);
         // TODO получить положительный ответ от provider-node-manager
+    }
+
+    public void updateSession(Long nodeId, CurrWebSocketSession webSocketSession) {
+        repository.findById(nodeId)
+                .ifPresent(node -> repository.save(node
+                        .setWebSocketSession(webSocketSession)
+                        .setCustomerNodeState(CustomerNodeState.ACTIVE)));
+    }
+
+    public void clearSession(Long nodeId) {
+        repository.findById(nodeId)
+                .ifPresent(node -> repository.save(node
+                        .setWebSocketSession(null)
+                        .setCustomerNodeState(CustomerNodeState.DETACHED)));
+    }
+
+    /**
+     * Регистрация новой ноды либо проверка того, что нода уже существует
+     */
+    public boolean register(Long nodeId) {
+        return repository.findById(nodeId).isPresent();
     }
 }
