@@ -1,5 +1,6 @@
 import orjson
 import websockets
+import logging
 
 __MTYPE = 'type'
 __MDATA = 'data'
@@ -7,7 +8,7 @@ __NODE_ID = 'customerNodeId'
 
 async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> None:
     async for message in websocket:
-        print(f"Consume message\n:{message}")
+        logging.info(f"Consume message\n:{message}")
         wrapper = __parse_json(message)
         mtype = wrapper[__MTYPE]
         # if mtype == 'CUSTOMER_NODE_CREATION':

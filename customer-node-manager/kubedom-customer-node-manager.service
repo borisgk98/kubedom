@@ -1,5 +1,5 @@
 [Unit]
-Description=Kubedom provider node manager
+Description=Kubedom customer node manager
 After=network.target
 StartLimitIntervalSec=0
 
@@ -8,7 +8,10 @@ Type=simple
 Restart=always
 RestartSec=10
 User=root
-ExecStart=/usr/bin/sh /opt/kubedom/provider-node-manager/start-service.sh
+ExecStart=/usr/bin/python3 /opt/kubedom/customer-node-manager/main.py
+#Dont work
+#StandardOutput=file:/var/log/kubedom/app.log
+#StandardError=file:/var/log/kubedom/error.log
 
 [Install]
 WantedBy=multi-user.target

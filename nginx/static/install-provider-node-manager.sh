@@ -3,7 +3,7 @@
 cd /tmp
 echo "Installing wget, unzip, virtualbox, python3, pip"
 export DEBIAN_FRONTEND=noninteractive
-apk-get -y install wget unzip virtualbox python3 pip
+apt-get -y install wget unzip virtualbox python3 pip
 # shellcheck disable=SC2028
 echo '\n'
 
