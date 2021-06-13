@@ -1,5 +1,6 @@
 import virtualbox
 from bash import bash
+from virtualbox.library import CleanupMode
 
 vbox = virtualbox.VirtualBox()
 __MACHINE_INNER_NAME__ = 'customer-node'
@@ -49,4 +50,13 @@ def start(machine_name):
 
 def remove(machine_name):
     machine = vbox.find_machine(machine_name)
-    machine.unregister()
+    poweroff_vm(machine_name)
+    machine.unregister(cleanup_mode=CleanupMode(4))
+
+
+def poweroff_vm(vm_id):
+    """
+    Issues a 'poweroff' command to VirtualBox for the given VM.
+    """
+    print("Powering off VM: %s..." % vm_id)
+    bash(f'VBoxManage controlvm {vm_id} poweroff')

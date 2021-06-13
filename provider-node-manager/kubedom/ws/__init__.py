@@ -25,17 +25,27 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
         print(f"Consume message\n:{message}")
         wrapper = __parse_json(message)
         mtype = wrapper[__MTYPE]
-        if mtype == 'CUSTOMER_NODE_CREATION':
-            print('Customer node creation start')
-            dto = __parse_json(wrapper[__MDATA])
-            ova_location = dto['ovaLocation']
-            machine_name = dto['machineName']
-            __download_and_save(ova_location)
-            api.create_machine(__OVA_FILE_LOCATION, machine_name)
-            api.start(machine_name)
-            if not __copy_config(dto['customerNodeConfig']):
+        try:
+            if mtype == 'CUSTOMER_NODE_CREATION':
+                print('Customer node creation start')
+                dto = __parse_json(wrapper[__MDATA])
+                ova_location = dto['ovaLocation']
+                machine_name = dto['machineName']
+                __download_and_save(ova_location)
+                api.create_machine(__OVA_FILE_LOCATION, machine_name)
+                api.start(machine_name)
+                if not __copy_config(dto['customerNodeConfig']):
+                    api.remove(machine_name)
+                print('Customer node creation finish successfully')
+            elif mtype == 'CUSTOMER_NODE_REMOVING':
+                print('Customer node removing start')
+                dto = __parse_json(wrapper[__MDATA])
+                machine_name = dto['machineName']
                 api.remove(machine_name)
-            print('Customer node creation finish successfully')
+                print('Customer node removing finish successfully')
+        except Exception as e:
+            print("Some error while processing message")
+            print(e)
 
 
 async def consumer(hostname: str, port: int, path: str):

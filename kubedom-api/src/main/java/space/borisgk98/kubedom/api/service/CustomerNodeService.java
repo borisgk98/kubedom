@@ -11,6 +11,7 @@ import space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper;
 import space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest;
 import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeConfigDto;
 import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeCreationDto;
+import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeRemovingDto;
 import space.borisgk98.kubedom.api.model.entity.AppUser;
 import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
 import space.borisgk98.kubedom.api.model.entity.CustomerNode;
@@ -23,6 +24,8 @@ import space.borisgk98.kubedom.api.ws.WebSocketSender;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long> {
@@ -60,13 +63,15 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         }
         AppUser owner = securityService.getCurrAppUser();
         CustomerNode customerNode = new CustomerNode()
+                .setMachineName(generateMachineName())
                 .setProviderNode(providerNode)
                 .setOwner(owner);
         customerNode = customerNodeRepo.save(customerNode);
         var customerNodeCreationDto = new WSCustomerNodeCreationDto()
                 .setOvaLocation(ovaLocation)
                 .setCustomerNodeConfig(objectMapper.writeValueAsString(new WSCustomerNodeConfigDto()
-                        .setCustomerNodeId(customerNode.getId())));
+                        .setCustomerNodeId(customerNode.getId())))
+                .setMachineName(customerNode.getMachineName());
         webSocketSender.send(providerNode.getWebSocketSessionId(), customerNodeCreationDto);
         // TODO получить положительный ответ от provider-node-manager
     }
@@ -85,10 +90,25 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
                         .setCustomerNodeState(CustomerNodeState.DETACHED)));
     }
 
+    // TODO нормальные названия
+    private String generateMachineName() {
+        return "VM:" + UUID.randomUUID().toString();
+    }
+
     /**
      * Регистрация новой ноды либо проверка того, что нода уже существует
      */
     public boolean register(Long nodeId) {
         return repository.findById(nodeId).isPresent();
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) throws ModelNotFound {
+        CustomerNode customerNode = read(id);
+        ProviderNode providerNode = customerNode.getProviderNode();
+        webSocketSender.send(providerNode.getWebSocketSessionId(), new WSCustomerNodeRemovingDto()
+                .setMachineName(customerNode.getMachineName()));
+//        repository.delete(customerNode);
     }
 }

@@ -70,4 +70,7 @@ public class CustomerNode implements IEntity<Long> {
 
     @Column(name = "ws_session_id", insertable = false, updatable = false)
     private String webSocketSessionId;
+
+    @Column(name = "machine_name")
+    private String machineName;
 }

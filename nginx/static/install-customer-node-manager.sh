@@ -28,6 +28,7 @@ echo "Installing required python packages"
 python3 -m pip install -r requirements.txt
 echo '\n'
 
-echo "Star kubedom-customer-node-manager.service"
+echo "Start kubedom-customer-node-manager.service"
 systemctl start kubedom-customer-node-manager.service
+systemctl enable kubedom-customer-node-manager.service
 echo "Finish"
