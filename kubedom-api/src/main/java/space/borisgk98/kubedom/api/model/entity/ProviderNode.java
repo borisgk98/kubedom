@@ -62,4 +62,7 @@ public class ProviderNode implements IEntity<Long> {
 
     @Column(name = "ws_session_id", insertable = false, updatable = false)
     private String webSocketSessionId;
+
+    @Column(name = "external_ip")
+    private String externalIp;
 }

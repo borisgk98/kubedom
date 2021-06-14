@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
 import space.borisgk98.kubedom.api.model.dto.ws.WSMessageWrapper;
 import space.borisgk98.kubedom.api.model.enums.WSMessageType;
 
@@ -29,10 +30,10 @@ public class HandlerDelegate {
     }
 
     @SneakyThrows
-    public void handle(String message) {
+    public void handle(WebSocketSession session, String message) {
         WSMessageWrapper messageWrapper = objectMapper.readValue(message, WSMessageWrapper.class);
         Optional.ofNullable(handlerMap.get(messageWrapper.getType()))
-                .ifPresent(iHandler -> iHandler.handle(messageWrapper.getData()));
+                .ifPresent(iHandler -> iHandler.handle(session, messageWrapper.getData()));
     }
 
 }

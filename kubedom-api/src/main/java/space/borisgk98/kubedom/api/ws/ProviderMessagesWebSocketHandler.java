@@ -29,7 +29,7 @@ public class ProviderMessagesWebSocketHandler extends TextWebSocketHandler {
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String messageAsString = (String) message.getPayload();
         log.info("Receive message {}", messageAsString);
-        handlerDelegate.handle(messageAsString);
+        handlerDelegate.handle(session, messageAsString);
     }
 
     @Override

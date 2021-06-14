@@ -54,12 +54,13 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     // TODO exception processing
     @SneakyThrows
     @Transactional
-    public void create(CustomerNodeCreationRequest dto) {
+    public CustomerNode create(CustomerNodeCreationRequest dto) {
         ProviderNode providerNode = providerNodeService.search(providerNodeSearchMapper.unmap(dto))
                 .stream().findFirst()
                 .orElseThrow(ModelNotFound::new);
         if (providerNode.getWebSocketSession() == null) {
-            return;
+            // TODO
+            throw new Exception();
         }
         AppUser owner = securityService.getCurrAppUser();
         CustomerNode customerNode = new CustomerNode()
@@ -74,6 +75,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
                 .setMachineName(customerNode.getMachineName());
         webSocketSender.send(providerNode.getWebSocketSessionId(), customerNodeCreationDto);
         // TODO получить положительный ответ от provider-node-manager
+        return customerNode;
     }
 
     public void updateSession(Long nodeId, CurrWebSocketSession webSocketSession) {
@@ -110,5 +112,9 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         webSocketSender.send(providerNode.getWebSocketSessionId(), new WSCustomerNodeRemovingDto()
                 .setMachineName(customerNode.getMachineName()));
         repository.delete(customerNode);
+    }
+
+    public CustomerNode getBySessionId(String sessionId) {
+        return ((CustomerNodeRepo) repository).findByWebSocketSessionId(sessionId).orElseThrow(ModelNotFound::new);
     }
 }

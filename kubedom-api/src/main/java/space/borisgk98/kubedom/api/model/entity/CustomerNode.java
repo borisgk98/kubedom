@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -73,4 +74,21 @@ public class CustomerNode implements IEntity<Long> {
 
     @Column(name = "machine_name")
     private String machineName;
+
+    @Column(name = "master_token", columnDefinition="TEXT")
+    private String masterToken;
+
+    @Column(name = "kubectl_config", columnDefinition="TEXT")
+    private String kubectlConfig;
+
+    @ManyToOne
+    @JoinColumn(
+            name="kube_cluster_id"
+//            ,
+//            nullable=false
+    )
+    private KubeCluster kubeCluster;
+
+    @Column(name = "kube_cluster_id", insertable = false, updatable = false)
+    private Long kubeClusterId;
 }

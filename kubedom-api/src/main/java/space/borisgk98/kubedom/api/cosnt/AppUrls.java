@@ -13,4 +13,5 @@ public class AppUrls {
     public static final String CUSTOMER_NODE = "/customer-node";
     public static final String APP_USER = "/app-user";
     public static final String CURRENT = "/current";
+    public static final String KUBE_CLUSTER = "/kube-cluster";
 }

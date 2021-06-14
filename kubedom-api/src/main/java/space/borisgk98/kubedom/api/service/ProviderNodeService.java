@@ -32,9 +32,10 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
      * Регистрация новой ноды либо проверка того, что нода уже существует
      * @param providerToken токен поставщика
      * @param nodeUuid        идентификатор узла (генерируется на стороне менаждера узла поставщика)
+     * @param nodeId
      * @return              успешная регистрация или нет
      */
-    public boolean register(UUID providerToken, UUID nodeUuid) {
+    public boolean register(UUID providerToken, UUID nodeUuid, String nodeId) {
         if (!appUserService.existByToken(providerToken)) {
             return false;
         }
@@ -47,6 +48,7 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
                 .owner(appUser)
                 .ownerId(appUser.getId())
                 .nodeUuid(nodeUuid)
+                .externalIp(nodeId)
                 .build();
         repository.save(newProviderNode);
         return true;
