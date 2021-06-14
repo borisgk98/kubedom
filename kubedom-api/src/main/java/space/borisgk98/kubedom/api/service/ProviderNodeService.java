@@ -9,6 +9,7 @@ import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
 import space.borisgk98.kubedom.api.model.entity.AppUser;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
 import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
+import space.borisgk98.kubedom.api.model.enums.ProviderNodeType;
 import space.borisgk98.kubedom.api.repo.ProviderNodeRepo;
 
 import javax.persistence.EntityManager;
@@ -33,15 +34,19 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
      * @param providerToken токен поставщика
      * @param nodeUuid        идентификатор узла (генерируется на стороне менаждера узла поставщика)
      * @param nodeId
+     * @param isPrimary
      * @return              успешная регистрация или нет
      */
-    public boolean register(UUID providerToken, UUID nodeUuid, String nodeId) {
+    public boolean register(UUID providerToken, UUID nodeUuid, String nodeId, boolean isPrimary) {
         if (!appUserService.existByToken(providerToken)) {
             return false;
         }
         AppUser appUser = appUserService.findByToken(providerToken).get();
         Optional<ProviderNode> existed = ((ProviderNodeRepo) repository).findByOwnerIdAndNodeUuid(appUser.getId(), nodeUuid);
         if (existed.isPresent()) {
+            repository.save(existed.get()
+                    .setType(isPrimary ? ProviderNodeType.PRIMARY : ProviderNodeType.SECONDARY)
+                    .setExternalIp(nodeId));
             return true;
         }
         ProviderNode newProviderNode = ProviderNode.builder()
@@ -49,6 +54,7 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
                 .ownerId(appUser.getId())
                 .nodeUuid(nodeUuid)
                 .externalIp(nodeId)
+                .type(isPrimary ? ProviderNodeType.PRIMARY : ProviderNodeType.SECONDARY)
                 .build();
         repository.save(newProviderNode);
         return true;

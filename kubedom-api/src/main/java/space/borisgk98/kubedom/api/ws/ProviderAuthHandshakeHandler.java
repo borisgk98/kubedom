@@ -36,7 +36,9 @@ public class ProviderAuthHandshakeHandler implements HandshakeHandler {
         Optional<UUID> token = HttpUtils.getHeader(serverHttpRequest, AppConst.PROVIDER_NODE_AUTH_HEADER).map(UUID::fromString);
         Optional<UUID> nodeUuid = HttpUtils.getHeader(serverHttpRequest, AppConst.PROVIDER_NODE_DEVICE_HEADER).map(UUID::fromString);
         Optional<String> nodeIp = HttpUtils.getHeader(serverHttpRequest, AppConst.PROVIDER_NODE_IP_HEADER);
-        if (token.isPresent() && nodeUuid.isPresent() && nodeIp.isPresent() && providerNodeService.register(token.get(), nodeUuid.get(), nodeIp.get())) {
+        Optional<Boolean> primary = HttpUtils.getHeader(serverHttpRequest, AppConst.PROVIDER_NODE_IS_PRIMARY)
+                .map(s -> s.equals("True"));
+        if (token.isPresent() && nodeUuid.isPresent() && nodeIp.isPresent() && primary.isPresent() && providerNodeService.register(token.get(), nodeUuid.get(), nodeIp.get(), primary.get())) {
             return handshakeHandler.doHandshake(serverHttpRequest, serverHttpResponse, webSocketHandler, map);
         } else {
             serverHttpResponse.setStatusCode(HttpStatus.FORBIDDEN);

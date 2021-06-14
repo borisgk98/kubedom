@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
+import space.borisgk98.kubedom.api.model.enums.ProviderNodeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,4 +66,8 @@ public class ProviderNode implements IEntity<Long> {
 
     @Column(name = "external_ip")
     private String externalIp;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ProviderNodeType type;
 }

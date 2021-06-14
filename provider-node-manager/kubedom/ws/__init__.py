@@ -4,6 +4,7 @@ import websockets
 import os.path
 import paramiko as ssh
 import time
+from kubedom.utils import test_external_ip
 from bash import bash
 
 import kubedom.config as CONFIG
@@ -51,10 +52,12 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
 
 async def consumer(hostname: str, port: int, path: str):
     web_socket_resource_url = f"ws://{hostname}:{port}{path}"
+    external_ip = __get_external_ip()
     headers = [
         ("Provider-node-token", CONFIG.TOKEN),
         ("Provider-node-device-uuid", CONFIG.NODE_UUID),
-        ("Provider-node-external-ip", __get_external_ip())
+        ("Provider-node-external-ip", external_ip),
+        ("Provider-node-is-primary", __is_primary(external_ip))
     ]
     async with websockets.connect(web_socket_resource_url, extra_headers=headers) as websocket:
         await consumer_handler(websocket)
@@ -99,3 +102,7 @@ def __parse_json(message: str):
 
 def __get_external_ip():
     return bash('dig +short myip.opendns.com @resolver1.opendns.com').value()
+
+
+def __is_primary(external_id: str):
+    return test_external_ip(external_id, 6443)
