@@ -23,30 +23,30 @@ public class KubeClusterService {
     private final CustomerNodeService customerNodeService;
     private final WebSocketSender webSocketSender;
 
-    @SneakyThrows
-    public void create() {
-        var customerNode = customerNodeService.create(CustomerNodeCreationRequest.builder().build());
-        // TODO нормальная реализациия метода customerNodeService.create через отправку ответа при успешном создании ноды
-        while (!Objects.equals(customerNodeService.read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
-            log.info("Waiting node ready");
-            sleep(500);
-        }
-        webSocketSender.send(customerNode.getWebSocketSessionId(), new WSK3sMasterCreationDto());
-    }
-
-    @SneakyThrows
-    public void createTest() {
-        Long nodeId = 8L;
-        var customerNode = customerNodeService.read(nodeId);
-        // TODO нормальная реализациия метода customerNodeService.create через отправку ответа при успешном создании ноды
-        while (!Objects.equals(customerNodeService.read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
-            log.info("Waiting node ready");
-            sleep(500);
-        }
-        webSocketSender.send(
-                customerNode.getWebSocketSessionId(),
-                new WSK3sMasterCreationDto()
-                        .setExternalIp(customerNode.getProviderNode().getExternalIp())
-        );
-    }
+//    @SneakyThrows
+//    public void create() {
+//        var customerNode = customerNodeService.createPending(CustomerNodeCreationRequest.builder().build());
+//        // TODO нормальная реализациия метода customerNodeService.create через отправку ответа при успешном создании ноды
+//        while (!Objects.equals(customerNodeService.read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
+//            log.info("Waiting node ready");
+//            sleep(500);
+//        }
+//        webSocketSender.send(customerNode.getWebSocketSessionId(), new WSK3sMasterCreationDto());
+//    }
+//
+//    @SneakyThrows
+//    public void createTest() {
+//        Long nodeId = 8L;
+//        var customerNode = customerNodeService.read(nodeId);
+//        // TODO нормальная реализациия метода customerNodeService.create через отправку ответа при успешном создании ноды
+//        while (!Objects.equals(customerNodeService.read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
+//            log.info("Waiting node ready");
+//            sleep(500);
+//        }
+//        webSocketSender.send(
+//                customerNode.getWebSocketSessionId(),
+//                new WSK3sMasterCreationDto()
+//                        .setExternalIp(customerNode.getProviderNode().getExternalIp())
+//        );
+//    }
 }

@@ -61,6 +61,9 @@ public class CustomerNode implements IEntity<Long> {
     @Column(name = "node_state")
     private CustomerNodeState customerNodeState;
 
+    @Column(name = "ready")
+    private boolean ready = false;
+
     @OneToOne
     @JoinColumn(
             name="ws_session_id"

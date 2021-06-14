@@ -33,7 +33,8 @@ public class MasterCreationResponseHandler implements IHandler {
         customerNode
                 .setKubectlConfig(kubeConfig)
                 .setMasterToken(dto.getToken())
-                .setType(CustomerNodeType.MASTER);
+                .setType(CustomerNodeType.MASTER)
+                .setReady(true);
         customerNodeService.update(customerNode);
     }
 

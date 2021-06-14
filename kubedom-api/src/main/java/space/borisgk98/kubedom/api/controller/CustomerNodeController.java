@@ -19,13 +19,13 @@ public class CustomerNodeController {
 
     private final CustomerNodeService customerNodeService;
 
-    @PostMapping
-    public void create(@RequestBody CustomerNodeCreationRequest dto) {
-        customerNodeService.create(dto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(name = "id") Long customerNodeId) {
-        customerNodeService.delete(customerNodeId);
-    }
+//    @PostMapping
+//    public void create(@RequestBody CustomerNodeCreationRequest dto) {
+//        customerNodeService.createPending(dto);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public void delete(@PathVariable(name = "id") Long customerNodeId) {
+//        customerNodeService.delete(customerNodeId);
+//    }
 }

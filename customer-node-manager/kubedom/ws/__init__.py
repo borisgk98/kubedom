@@ -28,6 +28,19 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
                 logging.info("Send token and kubectl config to server")
                 logging.debug(f"Sending data: {send_data}")
                 await websocket.send(send_data)
+            elif mtype == 'K3S_WORKER_CREATION':
+                accept_dto = __parse_json(wrapper[__MDATA])
+                external_ip = accept_dto['masterExternalIp']
+                token = accept_dto['masterToken']
+                logging.info("Create k3s worker node")
+                __worker_creation(external_ip, token)
+                logging.info("Successfully created k3s worker node")
+                dto = {
+                    'type': 'K3S_WORKER_CREATION_RESPONSE'
+                }
+                send_data = json.dumps(dto)
+                logging.debug(f"Sending data: {send_data}")
+                await websocket.send(send_data)
         except Exception as e:
             logging.critical(e, exc_info=True)
 
@@ -53,3 +66,9 @@ def __master_creation(external_ip: str):
         'token': token,
         'kubectlConfig': kubectl_config
     }
+#     TODO check status
+
+
+def __worker_creation(master_ip: str, master_token: str):
+    bash(f'curl -sfL https://get.k3s.io | sh -s - agent --token {master_token} --server https://{master_ip}:6443')
+#     TODO check status

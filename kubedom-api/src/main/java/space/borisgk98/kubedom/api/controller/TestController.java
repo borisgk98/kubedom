@@ -11,7 +11,9 @@ import space.borisgk98.kubedom.api.cosnt.AppConst;
 import space.borisgk98.kubedom.api.exception.ModelNotFound;
 import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
 import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeCreationDto;
+import space.borisgk98.kubedom.api.model.entity.CustomerNode;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
+import space.borisgk98.kubedom.api.service.CustomerNodeService;
 import space.borisgk98.kubedom.api.service.ProviderNodeService;
 import space.borisgk98.kubedom.api.ws.WebSocketSender;
 
@@ -23,18 +25,16 @@ public class TestController {
     private ProviderNodeService providerNodeService;
     @Autowired
     private WebSocketSender webSocketSender;
+    @Autowired
+    private CustomerNodeService customerNodeService;
 
     @Value("${app.ova-location}")
     private String ovaLocation;
 
     @GetMapping
-    public ResponseEntity check() {
-        ProviderNode providerNode = providerNodeService.search(new ProviderNodeSearchRequest())
-                .stream().findFirst()
-                .orElseThrow(ModelNotFound::new);
-        var customerNodeCreationDto = new WSCustomerNodeCreationDto();
-        customerNodeCreationDto.setOvaLocation(ovaLocation);
-        webSocketSender.send(providerNode.getWebSocketSessionId(), customerNodeCreationDto);
-        return ResponseEntity.ok("");
+    public void check() {
+        CustomerNode worker = customerNodeService.read(8L);
+        CustomerNode master = customerNodeService.read(1L);
+        customerNodeService.deployK3sWorker(worker, master);
     }
 }
