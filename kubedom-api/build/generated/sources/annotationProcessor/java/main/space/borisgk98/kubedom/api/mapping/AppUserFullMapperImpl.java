@@ -7,7 +7,7 @@ import space.borisgk98.kubedom.api.model.entity.AppUser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-06-14T19:04:43+0300",
+    date = "2021-06-14T23:03:57+0300",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.0.2.jar, environment: Java 15.0.2 (N/A)"
 )
 @Component

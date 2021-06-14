@@ -71,8 +71,11 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     }
 
     @SneakyThrows
-    @Async
     public void deploy(CustomerNode customerNode, ProviderNode providerNode) {
+        customerNode.setProviderNode(providerNode);
+        customerNode.setProviderNodeId(providerNode.getId());
+        customerNode.setCustomerNodeState(CustomerNodeState.PENDING);
+        update(customerNode);
         var customerNodeCreationDto = new WSCustomerNodeCreationDto()
                 .setOvaLocation(ovaLocation)
                 .setCustomerNodeConfig(objectMapper.writeValueAsString(new WSCustomerNodeConfigDto()

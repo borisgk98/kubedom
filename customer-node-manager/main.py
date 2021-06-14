@@ -7,8 +7,7 @@ from kubedom.ws import consumer
 from kubedom.const import *
 
 __PROVIDER_CONFIG_PATH = "/home/vm-provider/config.json"
-# __LOCAL_CONFIG_PATH = "/etc/kubedom/config.json"
-__LOCAL_CONFIG_PATH = "/home/boris/.kubedom/config.json"
+__LOCAL_CONFIG_PATH = "/etc/kubedom/config.json"
 __LOG_PATH = '/var/log/kubedom/app.log'
 
 # TODO wss

@@ -15,6 +15,7 @@ import space.borisgk98.kubedom.api.repo.ProviderNodeRepo;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -77,7 +78,8 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
     // TODO продвинутый поиск
     public List<ProviderNode> search(ProviderNodeSearchRequest searchRequest) {
         return repository.findAll().stream()
-                .filter(providerNode -> providerNode.getWebSocketSessionId() != null && ProviderNodeState.ACTIVE == providerNode.getProviderNodeState())
+                .filter(node -> Objects.equals(node.getType(), searchRequest.getProviderNodeType()))
+                .filter(node -> Objects.equals(node.getProviderNodeState(), searchRequest.getProviderNodeState()))
                 .collect(Collectors.toList());
     }
 }

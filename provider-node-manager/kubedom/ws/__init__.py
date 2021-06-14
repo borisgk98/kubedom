@@ -1,5 +1,4 @@
 import orjson
-import requests as requests
 import websockets
 import os.path
 import paramiko as ssh
@@ -68,8 +67,7 @@ def __download_and_save(ova_location: str):
         print(f"Use file from cache ({__OVA_FILE_LOCATION})")
         return
     print("Download ova image")
-    r = requests.get(ova_location, allow_redirects=True)
-    open(__OVA_FILE_LOCATION, 'wb').write(r.content)
+    bash(f"wget -O {__OVA_FILE_LOCATION} {ova_location}")
     print("Download finished")
 
 

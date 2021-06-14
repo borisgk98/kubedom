@@ -16,8 +16,8 @@ public class KubeClusterController {
     private final KubeClusterService kubeClusterService;
 
 //    // TODO more parameters
-//    @PostMapping
-//    public void create() {
-//        kubeClusterService.createTest();
-//    }
+    @PostMapping
+    public void create() {
+        kubeClusterService.create();
+    }
 }

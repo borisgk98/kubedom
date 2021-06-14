@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import space.borisgk98.kubedom.api.model.enums.KubeClusterStatus;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,4 +47,8 @@ public class KubeCluster implements IEntity<Long> {
 
     @Column(name = "owner_id", insertable = false, updatable = false)
     private Long ownerId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private KubeClusterStatus status;
 }
