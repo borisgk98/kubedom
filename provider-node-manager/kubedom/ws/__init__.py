@@ -67,7 +67,7 @@ def __download_and_save(ova_location: str):
         print(f"Use file from cache ({__OVA_FILE_LOCATION})")
         return
     print("Download ova image")
-    bash(f"wget -O {__OVA_FILE_LOCATION} {ova_location}")
+    bash(f"wget --no-cache -O {__OVA_FILE_LOCATION} {ova_location}")
     print("Download finished")
 
 

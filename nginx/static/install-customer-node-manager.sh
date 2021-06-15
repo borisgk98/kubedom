@@ -1,5 +1,8 @@
 # should run under root
 # required: wget, unzip, python3, pip
+echo "Create user vm-provider"
+useradd -m vm-provider
+
 cd /tmp
 echo "Installing wget, unzip, python3, pip"
 export DEBIAN_FRONTEND=noninteractive

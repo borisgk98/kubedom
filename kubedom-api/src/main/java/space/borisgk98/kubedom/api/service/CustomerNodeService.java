@@ -89,10 +89,11 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     public void deployK3sMaster(CustomerNode customerNode) {
         while (!Objects.equals(read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
             log.info("Waiting customer node {} ready", customerNode.getId());
-            sleep(500);
+            sleep(15000);
         }
+        var stored = read(customerNode.getId());
         webSocketSender.send(
-                customerNode.getWebSocketSessionId(),
+                stored.getWebSocketSessionId(),
                 new WSK3sMasterCreationDto()
                         .setExternalIp(customerNode.getProviderNode().getExternalIp())
         );
@@ -103,7 +104,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     public void deployK3sWorker(CustomerNode workerNode, CustomerNode masterNode) {
         while (!Objects.equals(read(workerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
             log.info("Waiting customer node {} ready", workerNode.getId());
-            sleep(500);
+            sleep(15000);
         }
         webSocketSender.send(
                 workerNode.getWebSocketSessionId(),
