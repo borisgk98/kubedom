@@ -27,7 +27,7 @@ public abstract class AbstractCrudService<T extends IEntity<F>, F> implements IC
     @Override
     public T read(F id) throws ModelNotFound {
         Optional<T> m = repository.findById(id);
-        if (!m.isPresent()) {
+        if (m.isEmpty()) {
             throw new ModelNotFound();
         }
         return m.get();

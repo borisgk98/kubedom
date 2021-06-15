@@ -1,4 +1,4 @@
-package space.borisgk98.kubedom.api.model.dto.ws;
+package space.borisgk98.kubedom.api.model.dto.rest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-public class WSK3sWorkerCreationDto {
-    private String masterExternalIp;
-    private String masterToken;
-    private String nodeName;
+public class ClusterCreationRequest {
+    private Long masterCount;
+    private Long workerCount;
 }

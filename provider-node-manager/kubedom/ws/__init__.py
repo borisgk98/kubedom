@@ -1,8 +1,11 @@
+import logging
+
 import orjson
 import websockets
 import os.path
 import paramiko as ssh
 import time
+import traceback
 from kubedom.utils import test_external_ip
 from bash import bash
 
@@ -23,12 +26,12 @@ __MAX_RETRIES = 10
 
 async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> None:
     async for message in websocket:
-        print(f"Consume message\n:{message}")
+        logging.info(f"Consume message\n:{message}")
         wrapper = __parse_json(message)
         mtype = wrapper[__MTYPE]
         try:
             if mtype == 'CUSTOMER_NODE_CREATION':
-                print('Customer node creation start')
+                logging.info('Customer node creation start')
                 dto = __parse_json(wrapper[__MDATA])
                 ova_location = dto['ovaLocation']
                 machine_name = dto['machineName']
@@ -37,16 +40,17 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
                 api.start(machine_name)
                 if not __copy_config(dto['customerNodeConfig']):
                     api.remove(machine_name)
-                print('Customer node creation finish successfully')
+                else:
+                    logging.info('Customer node creation finish successfully')
             elif mtype == 'CUSTOMER_NODE_REMOVING':
-                print('Customer node removing start')
+                logging.info('Customer node removing start')
                 dto = __parse_json(wrapper[__MDATA])
                 machine_name = dto['machineName']
                 api.remove(machine_name)
-                print('Customer node removing finish successfully')
-        except Exception as e:
-            print("Some error while processing message")
-            print(e)
+                logging.info('Customer node removing finish successfully')
+        except Exception:
+            logging.error("Some error while processing message")
+            logging.error(traceback.format_exc())
 
 
 async def consumer(hostname: str, port: int, path: str):
@@ -64,16 +68,17 @@ async def consumer(hostname: str, port: int, path: str):
 
 def __download_and_save(ova_location: str):
     if os.path.isfile(__OVA_FILE_LOCATION):
-        print(f"Use file from cache ({__OVA_FILE_LOCATION})")
+        logging.info(f"Use file from cache ({__OVA_FILE_LOCATION})")
         return
-    print("Download ova image")
+    logging.info("Download ova image")
     bash(f"wget --no-cache -O {__OVA_FILE_LOCATION} {ova_location}")
-    print("Download finished")
+    logging.info("Download finished")
 
 
 def __copy_config(config: str):
-    open(__CONFIG_PATH_LOCAL, 'w').write(config)
+    logging.info("Copy config to customer vm via ssh")
 
+    open(__CONFIG_PATH_LOCAL, 'w').write(config)
     retry = 0
     host = __VM_HOST
     port = __VM_PORT

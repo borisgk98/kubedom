@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import space.borisgk98.kubedom.api.model.enums.KubeClusterStatus;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +36,7 @@ public class KubeCluster implements IEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @OneToMany(mappedBy = "kubeCluster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<CustomerNode> nodes;
 
     @ManyToOne

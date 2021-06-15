@@ -1,3 +1,5 @@
+import logging
+
 import virtualbox
 from bash import bash
 from virtualbox.library import CleanupMode
@@ -7,7 +9,7 @@ __MACHINE_INNER_NAME__ = 'customer-node'
 
 
 def create_machine(ova_location, machine_name, inner_name=__MACHINE_INNER_NAME__):
-    print("Create machine %s" % machine_name)
+    logging.info("Create machine %s" % machine_name)
 
     # Create new IAppliance and read the exported machine
     # called 'ubuntu'.
@@ -58,5 +60,5 @@ def poweroff_vm(vm_id):
     """
     Issues a 'poweroff' command to VirtualBox for the given VM.
     """
-    print("Powering off VM: %s..." % vm_id)
+    logging.info("Powering off VM: %s..." % vm_id)
     bash(f'VBoxManage controlvm {vm_id} poweroff')

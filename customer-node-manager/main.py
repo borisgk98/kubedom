@@ -8,11 +8,11 @@ from kubedom.const import *
 
 __PROVIDER_CONFIG_PATH = "/home/vm-provider/config.json"
 __LOCAL_CONFIG_PATH = "/etc/kubedom/config.json"
-__LOG_PATH = '/var/log/kubedom/app.log'
+__LOG_PATH = '/var/log/kubedom/customer.log'
 
 # TODO wss
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, filename=__LOG_PATH)
 
     logging.info("Start customer node manager")
     # Waiting while create file /home/vm-provider/config.json

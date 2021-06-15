@@ -7,12 +7,14 @@ import org.springframework.web.socket.WebSocketSession;
 import space.borisgk98.kubedom.api.model.enums.CustomerNodeType;
 import space.borisgk98.kubedom.api.model.enums.WSMessageType;
 import space.borisgk98.kubedom.api.service.CustomerNodeService;
+import space.borisgk98.kubedom.api.service.KubeClusterService;
 import space.borisgk98.kubedom.api.ws.handlers.IHandler;
 
 @Service
 @RequiredArgsConstructor
 public class WorkerCreationResponseHandler implements IHandler {
     private final CustomerNodeService customerNodeService;
+    private final KubeClusterService kubeClusterService;
 
     @Override
     @SneakyThrows
@@ -22,6 +24,7 @@ public class WorkerCreationResponseHandler implements IHandler {
                 .setType(CustomerNodeType.WORKER)
                 .setReady(true);
         customerNodeService.update(customerNode);
+        kubeClusterService.updateClusterStatus(customerNode.getKubeCluster());
     }
 
     @Override

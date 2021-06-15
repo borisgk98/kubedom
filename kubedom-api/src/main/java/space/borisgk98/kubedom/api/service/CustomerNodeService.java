@@ -66,6 +66,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
                 .setMachineName(generateMachineName())
                 .setOwner(kubeCluster.getOwner())
                 .setType(customerNodeType)
+                .setKubeCluster(kubeCluster)
                 .setCustomerNodeState(CustomerNodeState.PENDING);
         return customerNodeRepo.save(customerNode);
     }
@@ -86,32 +87,45 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
 
     @SneakyThrows
     @Async
-    public void deployK3sMaster(CustomerNode customerNode) {
-        while (!Objects.equals(read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
-            log.info("Waiting customer node {} ready", customerNode.getId());
+    public void deployK3sMaster(Long customerNodeId) {
+        while (!Objects.equals(read(customerNodeId).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
+            log.info("Waiting customer node {} ready", customerNodeId);
             sleep(15000);
         }
-        var stored = read(customerNode.getId());
+        var stored = read(customerNodeId);
         webSocketSender.send(
                 stored.getWebSocketSessionId(),
                 new WSK3sMasterCreationDto()
-                        .setExternalIp(customerNode.getProviderNode().getExternalIp())
+                        .setExternalIp(stored.getProviderNode().getExternalIp())
+                        .setNodeName(String.format("master-%d", customerNodeId))
         );
     }
 
     @SneakyThrows
     @Async
-    public void deployK3sWorker(CustomerNode workerNode, CustomerNode masterNode) {
-        while (!Objects.equals(read(workerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
-            log.info("Waiting customer node {} ready", workerNode.getId());
+    public void deployK3sWorker(Long workerNodeId, Long masterNodeId) {
+        while (!Objects.equals(read(workerNodeId).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
+            log.info("Waiting customer node {} ready", workerNodeId);
             sleep(15000);
         }
+        while (!checkMaster(masterNodeId)) {
+            log.info("Waiting master customer node {} ready", masterNodeId);
+            sleep(15000);
+        }
+        var storedWorker = read(workerNodeId);
+        var storedMaster = read(masterNodeId);
         webSocketSender.send(
-                workerNode.getWebSocketSessionId(),
+                storedWorker.getWebSocketSessionId(),
                 new WSK3sWorkerCreationDto()
-                        .setMasterExternalIp(masterNode.getProviderNode().getExternalIp())
-                        .setMasterToken(masterNode.getMasterToken())
+                        .setMasterExternalIp(storedMaster.getProviderNode().getExternalIp())
+                        .setMasterToken(storedMaster.getMasterToken())
+                        .setNodeName(String.format("worker-%d", workerNodeId))
         );
+    }
+
+    private boolean checkMaster(Long masterNodeId) {
+        CustomerNode master = read(masterNodeId);
+        return Objects.equals(master.getCustomerNodeState(), CustomerNodeState.ACTIVE) && master.isReady();
     }
 
     public void updateSession(Long nodeId, CurrWebSocketSession webSocketSession) {

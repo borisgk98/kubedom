@@ -33,8 +33,9 @@ public class TestController {
 
     @GetMapping
     public void check() {
-        CustomerNode worker = customerNodeService.read(8L);
-        CustomerNode master = customerNodeService.read(1L);
-        customerNodeService.deployK3sWorker(worker, master);
+//        var providerNode = providerNodeService.read(6L);
+//        var workerNode = customerNodeService.read(79L);
+//        customerNodeService.deploy(workerNode, providerNode);
+        customerNodeService.deployK3sWorker(81L, 80L);
     }
 }

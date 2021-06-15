@@ -11,6 +11,7 @@ import space.borisgk98.kubedom.api.model.entity.ProviderNode;
 import space.borisgk98.kubedom.api.model.enums.CustomerNodeType;
 import space.borisgk98.kubedom.api.model.enums.WSMessageType;
 import space.borisgk98.kubedom.api.service.CustomerNodeService;
+import space.borisgk98.kubedom.api.service.KubeClusterService;
 import space.borisgk98.kubedom.api.ws.handlers.IHandler;
 
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ public class MasterCreationResponseHandler implements IHandler {
 
     private final ObjectMapper objectMapper;
     private final CustomerNodeService customerNodeService;
+    private final KubeClusterService kubeClusterService;
 
     @Override
     @SneakyThrows
@@ -36,6 +38,7 @@ public class MasterCreationResponseHandler implements IHandler {
                 .setType(CustomerNodeType.MASTER)
                 .setReady(true);
         customerNodeService.update(customerNode);
+        kubeClusterService.updateClusterStatus(customerNode.getKubeCluster());
     }
 
     private String replaceKubeApiServerIp(String originalKubeConfig, String ip) {

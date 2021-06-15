@@ -13,4 +13,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class WSK3sMasterCreationDto {
     private String externalIp;
+    private String nodeName;
 }

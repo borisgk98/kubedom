@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import space.borisgk98.kubedom.api.model.dto.rest.CustomerNodeCreationRequest;
-import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
-import space.borisgk98.kubedom.api.model.dto.ws.WSK3sMasterCreationDto;
+import space.borisgk98.kubedom.api.model.dto.rest.ClusterCreationRequest;
+import space.borisgk98.kubedom.api.model.entity.CustomerNode;
 import space.borisgk98.kubedom.api.model.entity.KubeCluster;
-import space.borisgk98.kubedom.api.model.enums.CustomerNodeState;
+import space.borisgk98.kubedom.api.model.entity.ProviderNode;
 import space.borisgk98.kubedom.api.model.enums.CustomerNodeType;
 import space.borisgk98.kubedom.api.model.enums.KubeClusterStatus;
 import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
@@ -17,9 +16,11 @@ import space.borisgk98.kubedom.api.repo.KubeClusterRepo;
 import space.borisgk98.kubedom.api.security.SecurityService;
 import space.borisgk98.kubedom.api.ws.WebSocketSender;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
-
-import static java.lang.Thread.sleep;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,35 +34,68 @@ public class KubeClusterService {
     private final SecurityService securityService;
     private final ProviderNodeService providerNodeService;
 
+    // TODO разобраться с транзационностью и ассинхронностью
     @SneakyThrows
-    public KubeCluster create() {
+    public KubeCluster create(ClusterCreationRequest clusterCreationRequest) {
+        // TODO мультимастер ноды и валидация, обработка ошибок
+        if (clusterCreationRequest.getMasterCount() != 1) {
+            throw new Exception();
+        }
         var user = securityService.getCurrAppUser();
         var cluster = new KubeCluster()
                 .setStatus(KubeClusterStatus.PENDING)
                 .setOwner(user);
         cluster = kubeClusterRepo.save(cluster);
-        var customerNode = customerNodeService.createPending(cluster, CustomerNodeType.MASTER);
-        var providerNode = providerNodeService.search(new ProviderNodeSearchRequest()
-                .setProviderNodeState(ProviderNodeState.ACTIVE)
-                .setProviderNodeType(ProviderNodeType.PRIMARY)).stream().findFirst().get();
-        customerNodeService.deploy(customerNode, providerNode);
-        customerNodeService.deployK3sMaster(customerNode);
-        return cluster;
+        var providerNodes = providerNodeService.getAll().stream()
+                .filter(node -> Objects.equals(node.getProviderNodeState(), ProviderNodeState.ACTIVE))
+                .collect(Collectors.toList());
+        var providerNodesForMaster = providerNodes.stream()
+                .filter(providerNode -> Objects.equals(providerNode.getType(), ProviderNodeType.PRIMARY))
+                .limit(clusterCreationRequest.getMasterCount())
+                .collect(Collectors.toList());
+        if (providerNodesForMaster.size() != clusterCreationRequest.getMasterCount()) {
+            throw new Exception();
+        }
+        var providerNodesForWorker = providerNodes.stream()
+                .filter(providerNode -> !providerNodesForMaster.contains(providerNode))
+                // в приоритете - SECONDARY
+                .sorted(Comparator.comparing(ProviderNode::getType).reversed())
+                .limit(clusterCreationRequest.getWorkerCount())
+                .collect(Collectors.toList());
+        if (providerNodesForWorker.size() != clusterCreationRequest.getWorkerCount()) {
+            throw new Exception();
+        }
+        cluster.setNodes(new ArrayList<>());
+        List<CustomerNode> masters = new ArrayList<>();
+        for (var providerNode : providerNodesForMaster) {
+            var masterNode = customerNodeService.createPending(cluster, CustomerNodeType.MASTER);
+            masters.add(masterNode);
+            cluster.getNodes().add(masterNode);
+            customerNodeService.deploy(masterNode, providerNode);
+            customerNodeService.deployK3sMaster(masterNode.getId());
+        }
+        for (var providerNode : providerNodesForWorker) {
+            var workerNode = customerNodeService.createPending(cluster, CustomerNodeType.WORKER);
+            cluster.getNodes().add(workerNode);
+            customerNodeService.deploy(workerNode, providerNode);
+            customerNodeService.deployK3sWorker(workerNode.getId(), masters.get(0).getId());
+        }
+        return kubeClusterRepo.save(cluster);
     }
 
-//    @SneakyThrows
-//    public void createTest() {
-//        Long nodeId = 8L;
-//        var customerNode = customerNodeService.read(nodeId);
-//        // TODO нормальная реализациия метода customerNodeService.create через отправку ответа при успешном создании ноды
-//        while (!Objects.equals(customerNodeService.read(customerNode.getId()).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
-//            log.info("Waiting node ready");
-//            sleep(500);
-//        }
-//        webSocketSender.send(
-//                customerNode.getWebSocketSessionId(),
-//                new WSK3sMasterCreationDto()
-//                        .setExternalIp(customerNode.getProviderNode().getExternalIp())
-//        );
-//    }
+    public void updateClusterStatus(KubeCluster kubeCluster) {
+        kubeCluster = kubeClusterRepo.getById(kubeCluster.getId());
+        if (kubeCluster.getNodes().stream().allMatch(CustomerNode::isReady)) {
+            kubeCluster.setStatus(KubeClusterStatus.READY);
+            kubeClusterRepo.save(kubeCluster);
+        }
+    }
+
+    public void delete(Long clusterId) {
+        KubeCluster kubeCluster = kubeClusterRepo.getById(clusterId);
+        for (var node : kubeCluster.getNodes()) {
+            customerNodeService.delete(node.getId());
+        }
+        kubeClusterRepo.delete(kubeCluster);
+    }
 }

@@ -3,10 +3,12 @@ import websockets
 import logging
 import json
 from bash import bash
+import os
 
 __MTYPE = 'type'
 __MDATA = 'data'
 __NODE_ID = 'customerNodeId'
+
 
 async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> None:
     async for message in websocket:
@@ -17,8 +19,9 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
             if mtype == 'K3S_MASTER_CREATION':
                 accept_dto = __parse_json(wrapper[__MDATA])
                 external_ip = accept_dto['externalIp']
+                node_name = accept_dto['nodeName']
                 logging.info("Create k3s master node")
-                creation_info = __master_creation(external_ip)
+                creation_info = __master_creation(external_ip, node_name)
                 logging.info("Successfully created k3s master node")
                 dto = {
                     'type': 'K3S_MASTER_CREATION_RESPONSE',
@@ -32,8 +35,9 @@ async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> Non
                 accept_dto = __parse_json(wrapper[__MDATA])
                 external_ip = accept_dto['masterExternalIp']
                 token = accept_dto['masterToken']
+                node_name = accept_dto['nodeName']
                 logging.info("Create k3s worker node")
-                __worker_creation(external_ip, token)
+                __worker_creation(external_ip, token, node_name)
                 logging.info("Successfully created k3s worker node")
                 dto = {
                     'type': 'K3S_WORKER_CREATION_RESPONSE'
@@ -58,8 +62,12 @@ def __parse_json(message: str):
     return orjson.loads(message)
 
 
-def __master_creation(external_ip: str):
-    bash(f'curl -sfL https://get.k3s.io | sh -s - server --tls-san "{external_ip}"')
+def __master_creation(external_ip: str, node_name: str):
+    bash(f'curl -sfL https://get.k3s.io | '
+         f'sh -s - server --tls-san "{external_ip}" '
+         f'--kube-apiserver-arg advertise-address={external_ip} '
+         f'--kube-apiserver-arg external-hostname={external_ip} '
+         f'--node-name {node_name}')
     token = open('/var/lib/rancher/k3s/server/node-token').read()
     kubectl_config = open('/etc/rancher/k3s/k3s.yaml').read()
     return {
@@ -69,6 +77,11 @@ def __master_creation(external_ip: str):
 #     TODO check status
 
 
-def __worker_creation(master_ip: str, master_token: str):
-    bash(f'curl -sfL https://get.k3s.io | sh -s - agent --token {master_token} --server https://{master_ip}:6443')
+def __worker_creation(master_ip: str, master_token: str, node_name: str):
+    command = f'curl -sfL https://get.k3s.io | sh -s - agent --token {master_token} --server https://{master_ip}:6443 --node-name {node_name}'
+    __execute_command(command)
 #     TODO check status
+
+def __execute_command(command: str):
+    logging.info(f'Execute: {command}')
+    os.system(command)
