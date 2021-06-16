@@ -31,6 +31,11 @@ router.get('/create-node', function(req, res, next) {
     res.render('create-node');
 });
 
+router.get('/cluster/:id', function(req, res, next) {
+    res.render('cluster');
+});
+
+
 // Not found
 router.get('*', function(req, res){
     // TODO not found page

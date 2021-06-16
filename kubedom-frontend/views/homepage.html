@@ -6,8 +6,7 @@
                     <a href="#" class="bg-transparent">
                         <img class="rounded-circle img-thumbnail" src="https://www.pinclipart.com/picdir/middle/379-3797946_software-developer-computer-servers-web-others-web-developer.png" alt="">
                     </a>
-                    <h1 class="text-white" id="user-login">Login</h1>
-                    <p class="text-white">example@example.com</p>
+                    <h1 class="text-white text-center" id="user-login">Login</h1>
                 </div>
 
 <!--                <ul>-->
@@ -18,14 +17,68 @@
             </div>
         </div>
         <div class="col-md-9">
-            <div class="panel border-bottom mb-4">
-                <h4 class="text-primary">Мои узлы</h4>
+            <div class="panel">
+                <div class="row">
+                    <div class="col-md-4 text-primary">
+                        <h4>Токен поставщика</h4>
+                    </div>
+                    <div class="col-md-8 ">
+                        <h4 class="text-danger" id="provider-token">Токен поставщика</h4>
+                    </div>
+                </div>
             </div>
-            <div class="panel border-bottom mb-4">
+            <div class="panel">
+                <h4 class="text-primary">Мои узлы </h4>
+                <a href="/create-node" class="text-success">Добавить</a>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">IP</th>
+                        <th scope="col">UUID</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">State</th>
+                    </tr>
+                    </thead>
+                    <tbody id="my-provider-nodes">
+<!--                    <tr>-->
+<!--                        <th scope="row">1</th>-->
+<!--                        <td>Mark</td>-->
+<!--                        <td>Otto</td>-->
+<!--                        <td>@mdo</td>-->
+<!--                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel">
                 <h4 class="text-primary">Арендованные узлы</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">IP</th>
+                        <th scope="col">UUID</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">State</th>
+                    </tr>
+                    </thead>
+                    <tbody id="not-my-provider-nodes">
+                    </tbody>
+                </table>
             </div>
             <div class="panel mb-4">
                 <h4 class="text-primary">Мои кластеры Kubernetes</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nodes count</th>
+                        <th scope="col">State</th>
+                    </tr>
+                    </thead>
+                    <tbody id="clusters">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

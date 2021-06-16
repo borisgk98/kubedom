@@ -1,0 +1,28 @@
+<div class="container" id="content">
+    <h2 id="cluster-name" class="text-primary"></h2>
+    <div class="panel">
+        Доступ к кластеру через <span class="text-monospace text-primary">kubectl</span>:
+    </div>
+    <pre class="pre-scrollable bg-dark p-3 rounded text-white" id="kubectl-config">
+    </pre>
+    <div class="panel">
+        <h4 class="text-primary">Узлы</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Type</th>
+                <th scope="col">State</th>
+                <th scope="col">Provider node ID</th>
+                <th scope="col">Ready</th>
+            </tr>
+            </thead>
+            <tbody id="cluster-nodes">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    load_page(load_cluster)
+</script>

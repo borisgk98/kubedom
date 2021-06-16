@@ -6,21 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import space.borisgk98.kubedom.api.cosnt.AppConst;
 import space.borisgk98.kubedom.api.cosnt.AppUrls;
-import space.borisgk98.kubedom.api.mapping.AppUserFullMapper;
-import space.borisgk98.kubedom.api.model.dto.rest.AppUserFullDto;
 import space.borisgk98.kubedom.api.model.dto.rest.CurrentUserDto;
-import space.borisgk98.kubedom.api.security.SecurityService;
 import space.borisgk98.kubedom.api.service.AppUserService;
 
 @RestController
 @RequestMapping(AppConst.SERVER_PREFIX + AppUrls.APP_USER)
 @RequiredArgsConstructor
 public class AppUserController {
-    private final SecurityService securityService;
     private final AppUserService appUserService;
 
     @GetMapping(AppUrls.CURRENT)
     public CurrentUserDto getCurrAppUser() {
-        return appUserFullMapper.map(securityService.getCurrAppUser());
+        return appUserService.getCurrentUserDto();
     }
 }

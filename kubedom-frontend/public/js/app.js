@@ -112,17 +112,89 @@ check_auth = async function () {
     });
 }
 
-async function load_homepage() {
-    console.log("load_homepage()")
+async function curr_user() {
     const request_url = API_URL + "/app-user/current";
-    console.log(request_url);
     let response = await jQuery.ajax({
         'type': 'GET',
         'url': request_url,
         'contentType': 'application/json',
         'dataType': 'json'
     });
+    return response;
+}
+
+async function load_homepage() {
+    console.log("load_homepage()")
+    let response = await curr_user();
     jQuery("#user-login").text(response['login'])
+    jQuery("#provider-token").text(response['token'])
+
+    let myNodes = response['myNodes']
+    myNodes.forEach(node => {
+        jQuery("#my-provider-nodes").after("                    <tr>\n" +
+            "                        <th scope=\"row\">" + node['id'] + "</th>\n" +
+            "                        <td>" + node['externalIp'] + "</td>\n" +
+            "                        <td>" + node['nodeUuid'] + "</td>\n" +
+            "                        <td>" + node['type'] + "</td>\n" +
+            "                        <td>" + node['providerNodeState'] + "</td>\n" +
+            "                    </tr>")
+    });
+
+    let notMyNodes = response['notMyNodes']
+    notMyNodes.forEach(node => {
+        jQuery("#not-my-provider-nodes").after("                    <tr>\n" +
+            "                        <th scope=\"row\">" + node['id'] + "</th>\n" +
+            "                        <td>" + node['externalIp'] + "</td>\n" +
+            "                        <td>" + node['nodeUuid'] + "</td>\n" +
+            "                        <td>" + node['type'] + "</td>\n" +
+            "                        <td>" + node['providerNodeState'] + "</td>\n" +
+            "                    </tr>")
+    });
+
+    let clusters = response['clusters']
+    clusters.forEach(cluster => {
+        console.log(cluster)
+        jQuery("#clusters").after("                    <tr>\n" +
+            "                        <th scope=\"row\"><a href='/cluster/" + cluster['id'] + "'>" + cluster['id'] + "</a></th>\n" +
+            "                        <td>" + cluster['nodes'].length + "</td>\n" +
+            "                        <td>" + cluster['status'] + "</td>\n" +
+            "                    </tr>")
+    });
+}
+
+async function load_cluster() {
+    let url = window.location.href;
+    let parts = url.split('/');
+    let clusterId = parts.pop() || parts.pop();
+    const request_url = API_URL + "/kube-cluster/" + clusterId;
+    let cluster = await jQuery.ajax({
+        'type': 'GET',
+        'url': request_url,
+        'contentType': 'application/json',
+        'dataType': 'json'
+    });
+
+    jQuery("#cluster-name").text("Кластер " + clusterId)
+
+    let masterNode = null
+    cluster.nodes.forEach(node => {
+        if (node.kubectlConfig != null && node['type'] == 'MASTER') {
+            masterNode = node
+        }
+    })
+    if (masterNode != null) {
+        jQuery("#kubectl-config").text(masterNode.kubectlConfig)
+    }
+
+    cluster.nodes.forEach(node => {
+        jQuery("#cluster-nodes").after("                    <tr>\n" +
+            "                        <th scope=\"row\">" + node['id'] + "</th>\n" +
+            "                        <td>" + node['type'] + "</td>\n" +
+            "                        <td>" + node['customerNodeState'] + "</td>\n" +
+            "                        <td>" + node['providerNodeId'] + "</td>\n" +
+            "                        <td>" + node['ready'] + "</td>\n" +
+            "                    </tr>")
+    });
 }
 
 async function load_page(loader) {

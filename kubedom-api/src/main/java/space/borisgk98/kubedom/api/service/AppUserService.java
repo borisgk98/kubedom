@@ -80,7 +80,7 @@ public class AppUserService extends AbstractCrudService<AppUser, Long> {
                 .map(KubeCluster::getNodes)
                 .flatMap(Collection::stream)
                 .map(CustomerNode::getProviderNode)
-                .filter(providerNode -> Objects.equals(providerNode.getOwnerId(), user.getId()))
+                .filter(providerNode -> !Objects.equals(providerNode.getOwnerId(), user.getId()))
                 .collect(Collectors.toList());
         var currUserDto = currentUserMapper.map(appUserFullMapper.map(user));
         currUserDto.setClusters(clusters.stream().map(kubeClusterMapper::map).collect(Collectors.toList()));
