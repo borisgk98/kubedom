@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import space.borisgk98.kubedom.api.cosnt.AppConst;
@@ -32,6 +33,7 @@ public class SessionManager {
 
     private static Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
+    @Transactional
     public void add(WebSocketSession session, SessionType sessionType) {
         sessions.put(session.getId(), session);
         CurrWebSocketSession newSession = sessionService.create(new CurrWebSocketSession().setId(session.getId()));
@@ -49,6 +51,8 @@ public class SessionManager {
         }
     }
 
+
+    @Transactional
     public void remove(WebSocketSession session, SessionType sessionType) {
         sessions.remove(session.getId());
         switch (sessionType) {

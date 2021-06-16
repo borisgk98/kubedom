@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import space.borisgk98.kubedom.api.exception.ModelNotFound;
 import space.borisgk98.kubedom.api.mapping.ProviderNodeSearchMapper;
 import space.borisgk98.kubedom.api.model.dto.ws.WSCustomerNodeConfigDto;
@@ -28,7 +30,6 @@ import space.borisgk98.kubedom.api.ws.WebSocketSender;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -92,6 +93,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
 
     @SneakyThrows
     @Async
+    @Transactional
     public void deployK3sMaster(Long customerNodeId) {
         log.info("Deploy master node {}", customerNodeId);
         while (!Objects.equals(read(customerNodeId).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
@@ -109,6 +111,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
 
     @SneakyThrows
     @Async
+    @Transactional
     public void deployK3sWorker(Long workerNodeId, Long masterNodeId) {
         log.info("Deploy worker node {}", workerNodeId);
         while (!Objects.equals(read(workerNodeId).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {

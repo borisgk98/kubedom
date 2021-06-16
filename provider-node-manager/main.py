@@ -6,8 +6,7 @@ __LOG_PATH = '/var/log/kubedom/provider.log'
 
 # TODO wss
 if __name__ == "__main__":
-    # logging.basicConfig(level=logging.INFO, filename=__LOG_PATH)
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, filename=__LOG_PATH)
 
     logging.info("Start")
     start()

@@ -24,7 +24,7 @@ class WSClient:
     async def listen_forever(self):
         while True:
             # outer loop restarted every time the connection fails
-            logging.debug('Creating new connection...')
+            logging.info('Creating new connection...')
             headers = [
                 ("Customer-node-device-uuid", self.node_id)
             ]
