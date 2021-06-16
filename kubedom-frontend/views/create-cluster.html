@@ -1,0 +1,20 @@
+<div class="container">
+    <h1 class="text-primary">Создать новый кластер</h1>
+    <form class="align-content-center" onsubmit="return false">
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label for="master_count" class="col-form-label float-right">Количество управляющих узлов</label>
+            </div>
+            <input type="number" id="master_count" class="col-sm-4 form-control-plaintext" placeholder="1" disabled required>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label for="worker_count" class="col-form-label float-right">Количество рабочих узлов</label>
+            </div>
+            <input type="number" id="worker_count" class="col-sm-4 form-control" placeholder="1" required autofocus min="0">
+        </div>
+
+        <button class="btn btn-lg btn-success" onclick="create_cluster()">Создать</button>
+    </form>
+</div>

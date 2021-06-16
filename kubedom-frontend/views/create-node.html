@@ -1,6 +1,35 @@
 <div class="container">
-    <h4>Добавление узла поставщика</h4>
+    <h1 class="text-primary">Добавление узла поставщика</h1>
     <div>
         Для того, чтобы добавить узел в сеть, нужно ввести следующую команду:
+        <pre class="bg-dark p-2 rounded text-white">sudo $(wget -O - https://www.kubedom.borisgk.space/static/install-provider-node-manager.sh | sudo sh -)</pre>
+        После этого нужно отредактировать конфиг:
+        <pre class="bg-dark p-2 rounded text-white">sudo nano /etc/kubedom/config.ini</pre>
+        Параметры конфига:
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Параметр</th>
+                <th scope="col">Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>token</td>
+                <td>Ваш токен поставщика, получить <a href="/homepage">тут</a></td>
+            </tr>
+            <tr>
+                <td>node_uuid</td>
+                <td>
+                    Случайный uuid для машины, можно получить с помощью команды <span class="text-monospace text-primary">uuidgen</span>.
+                    Так же можно вставить токен уже существовавший ранее машины, если она перешла в статус DETACHED.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        После того, как конфиг подправлен, нужно запустить менаджер следующей командой:
+        <pre class="bg-dark p-2 rounded text-white">sudo systemctl start kubedom-provider-node-manager.service</pre>
+        Так же рекомендуется добавить менаджер в автозагрузку:
+        <pre class="bg-dark p-2 rounded text-white">sudo systemctl enable kubedom-provider-node-manager.service</pre>
     </div>
 </div>

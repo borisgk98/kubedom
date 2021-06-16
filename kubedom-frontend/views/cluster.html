@@ -1,5 +1,13 @@
 <div class="container" id="content">
-    <h2 id="cluster-name" class="text-primary"></h2>
+
+    <div class="row">
+        <dic class="col-md-6">
+            <h1 id="cluster-name" class="text-primary"></h1>
+        </dic>
+        <div class="col-md-6">
+            <button class="btn btn-sm btn-danger float-right" onclick="remove_cluster()">Удалить</button>
+        </div>
+    </div>
     <div class="panel">
         Доступ к кластеру через <span class="text-monospace text-primary">kubectl</span>:
     </div>

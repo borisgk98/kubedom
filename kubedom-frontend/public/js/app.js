@@ -162,10 +162,48 @@ async function load_homepage() {
     });
 }
 
-async function load_cluster() {
+function get_cluster_id() {
     let url = window.location.href;
     let parts = url.split('/');
     let clusterId = parts.pop() || parts.pop();
+    return clusterId;
+}
+
+async function remove_cluster() {
+    let clusterId = get_cluster_id();
+    const request_url = API_URL + "/kube-cluster/" + clusterId;
+    jQuery.ajax({
+        'type': 'DELETE',
+        'url': request_url,
+        'contentType': 'application/json',
+        'dataType': 'json',
+        'success': redirect('/homepage')
+    });
+}
+
+async function create_cluster() {
+    var data = {
+        masterCount: $("#master_count").val(),
+        workerCount: $("#worker_count").val()
+    };
+    const request_url = API_URL + "/kube-cluster";
+    console.log(request_url);
+    jQuery.ajax({
+        'type': 'POST',
+        'url': request_url,
+        'contentType': 'application/json',
+        'dataType': 'json',
+        data: JSON.stringify(data),
+        'success': async () => {
+            console.log("success")
+            redirect("/homepage");
+        },
+        error: log_error
+    });
+}
+
+async function load_cluster() {
+    let clusterId = get_cluster_id();
     const request_url = API_URL + "/kube-cluster/" + clusterId;
     let cluster = await jQuery.ajax({
         'type': 'GET',

@@ -31,6 +31,10 @@ router.get('/create-node', function(req, res, next) {
     res.render('create-node');
 });
 
+router.get('/create-cluster', function(req, res, next) {
+    res.render('create-cluster');
+});
+
 router.get('/cluster/:id', function(req, res, next) {
     res.render('cluster');
 });
