@@ -21,6 +21,7 @@ import space.borisgk98.kubedom.api.model.entity.KubeCluster;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
 import space.borisgk98.kubedom.api.model.enums.CustomerNodeState;
 import space.borisgk98.kubedom.api.model.enums.CustomerNodeType;
+import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
 import space.borisgk98.kubedom.api.repo.CustomerNodeRepo;
 import space.borisgk98.kubedom.api.security.SecurityService;
 import space.borisgk98.kubedom.api.ws.WebSocketSender;
@@ -77,6 +78,10 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         customerNode.setProviderNodeId(providerNode.getId());
         customerNode.setCustomerNodeState(CustomerNodeState.PENDING);
         update(customerNode);
+
+        providerNode.setProviderNodeState(ProviderNodeState.USED);
+        providerNodeService.update(providerNode);
+
         var customerNodeCreationDto = new WSCustomerNodeCreationDto()
                 .setOvaLocation(ovaLocation)
                 .setCustomerNodeConfig(objectMapper.writeValueAsString(new WSCustomerNodeConfigDto()
@@ -88,6 +93,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     @SneakyThrows
     @Async
     public void deployK3sMaster(Long customerNodeId) {
+        log.info("Deploy master node {}", customerNodeId);
         while (!Objects.equals(read(customerNodeId).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
             log.info("Waiting customer node {} ready", customerNodeId);
             sleep(15000);
@@ -104,6 +110,7 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     @SneakyThrows
     @Async
     public void deployK3sWorker(Long workerNodeId, Long masterNodeId) {
+        log.info("Deploy worker node {}", workerNodeId);
         while (!Objects.equals(read(workerNodeId).getCustomerNodeState(), CustomerNodeState.ACTIVE)) {
             log.info("Waiting customer node {} ready", workerNodeId);
             sleep(15000);
@@ -162,6 +169,9 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
         webSocketSender.send(providerNode.getWebSocketSessionId(), new WSCustomerNodeRemovingDto()
                 .setMachineName(customerNode.getMachineName()));
         repository.delete(customerNode);
+
+        providerNode.setProviderNodeState(ProviderNodeState.ACTIVE);
+        providerNodeService.update(providerNode);
     }
 
     public CustomerNode getBySessionId(String sessionId) {

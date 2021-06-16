@@ -36,6 +36,6 @@ public class TestController {
 //        var providerNode = providerNodeService.read(6L);
 //        var workerNode = customerNodeService.read(79L);
 //        customerNodeService.deploy(workerNode, providerNode);
-        customerNodeService.deployK3sWorker(81L, 80L);
+        customerNodeService.deployK3sMaster(106L);
     }
 }

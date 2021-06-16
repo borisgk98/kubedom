@@ -64,11 +64,8 @@ def __parse_json(message: str):
 
 
 def __master_creation(external_ip: str, node_name: str):
-    bash(f'curl -sfL https://get.k3s.io | '
-         f'sh -s - server --tls-san "{external_ip}" '
-         f'--kube-apiserver-arg advertise-address={external_ip} '
-         f'--kube-apiserver-arg external-hostname={external_ip} '
-         f'--node-name {node_name}')
+    command = f'curl -sfL https://get.k3s.io | sh -s - server --tls-san "{external_ip}" --kube-apiserver-arg advertise-address={external_ip} --kube-apiserver-arg external-hostname={external_ip} --node-name {node_name}'.rstrip()
+    __execute_command(command)
     token = open('/var/lib/rancher/k3s/server/node-token').read()
     kubectl_config = open('/etc/rancher/k3s/k3s.yaml').read()
     return {

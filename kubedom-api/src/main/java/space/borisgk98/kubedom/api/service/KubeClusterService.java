@@ -16,6 +16,7 @@ import space.borisgk98.kubedom.api.repo.KubeClusterRepo;
 import space.borisgk98.kubedom.api.security.SecurityService;
 import space.borisgk98.kubedom.api.ws.WebSocketSender;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +36,7 @@ public class KubeClusterService {
     private final ProviderNodeService providerNodeService;
 
     // TODO разобраться с транзационностью и ассинхронностью
+    @Transactional
     @SneakyThrows
     public KubeCluster create(ClusterCreationRequest clusterCreationRequest) {
         // TODO мультимастер ноды и валидация, обработка ошибок
@@ -91,6 +93,7 @@ public class KubeClusterService {
         }
     }
 
+    @Transactional
     public void delete(Long clusterId) {
         KubeCluster kubeCluster = kubeClusterRepo.getById(clusterId);
         for (var node : kubeCluster.getNodes()) {

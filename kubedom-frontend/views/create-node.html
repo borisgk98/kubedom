@@ -1,6 +1,25 @@
 <div class="container">
     <h1 class="text-primary">Добавление узла поставщика</h1>
     <div>
+        Минимальные системные требования для узла:
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td>ОЗУ</td>
+                <td>4 Гб</td>
+            </tr>
+            <tr>
+                <td>ЦПУ (кол-во)</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Диск (свободное место)</td>
+                <td>20 Гб</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
         Для того, чтобы добавить узел в сеть, нужно ввести следующую команду:
         <pre class="bg-dark p-2 rounded text-white">sudo $(wget -O - https://www.kubedom.borisgk.space/static/install-provider-node-manager.sh | sudo sh -)</pre>
         После этого нужно отредактировать конфиг:
