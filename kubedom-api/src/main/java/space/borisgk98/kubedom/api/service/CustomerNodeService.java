@@ -65,12 +65,14 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
     @Transactional
     public CustomerNode createPending(KubeCluster kubeCluster, CustomerNodeType customerNodeType) {
         CustomerNode customerNode = new CustomerNode()
-                .setMachineName(generateMachineName())
                 .setOwner(kubeCluster.getOwner())
                 .setType(customerNodeType)
                 .setKubeCluster(kubeCluster)
                 .setCustomerNodeState(CustomerNodeState.PENDING);
-        return customerNodeRepo.save(customerNode);
+        customerNode = customerNodeRepo.save(customerNode);
+        customerNode.setMachineName(generateMachineName(customerNode));
+        customerNode = customerNodeRepo.save(customerNode);
+        return customerNode;
     }
 
     @SneakyThrows
@@ -152,9 +154,8 @@ public class CustomerNodeService extends AbstractCrudService<CustomerNode, Long>
                         .setCustomerNodeState(CustomerNodeState.DETACHED)));
     }
 
-    // TODO нормальные названия
-    private String generateMachineName() {
-        return "VM:" + UUID.randomUUID().toString();
+    private String generateMachineName(CustomerNode customerNode) {
+        return "customer_node_" + customerNode.getId();
     }
 
     /**

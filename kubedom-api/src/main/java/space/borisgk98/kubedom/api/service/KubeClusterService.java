@@ -74,13 +74,11 @@ public class KubeClusterService {
             masters.add(masterNode);
             cluster.getNodes().add(masterNode);
             customerNodeService.deploy(masterNode, providerNode);
-            customerNodeService.deployK3sMaster(masterNode.getId());
         }
         for (var providerNode : providerNodesForWorker) {
             var workerNode = customerNodeService.createPending(cluster, CustomerNodeType.WORKER);
             cluster.getNodes().add(workerNode);
             customerNodeService.deploy(workerNode, providerNode);
-            customerNodeService.deployK3sWorker(workerNode.getId(), masters.get(0).getId());
         }
         return kubeClusterRepo.save(cluster);
     }

@@ -76,6 +76,7 @@ class WSClient:
                 api.start(machine_name)
                 if not copy_config(dto['customerNodeConfig']):
                     api.remove(machine_name)
+                    logging.error('Cannot copy files to vm via ssh')
                 else:
                     logging.info('Customer node creation finish successfully')
             elif mtype == 'CUSTOMER_NODE_REMOVING':
