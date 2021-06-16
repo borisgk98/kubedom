@@ -30,6 +30,7 @@ spring:
     properties:
       hibernate:
         format-sql: true
+        enable_lazy_load_no_trans: true
 
 security:
   enabled: false

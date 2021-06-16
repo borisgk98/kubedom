@@ -24,6 +24,7 @@ unzip ../customer-node-manager.zip
 cp kubedom-customer-node-manager.service /etc/systemd/system/kubedom-customer-node-manager.service
 mkdir /etc/kubedom
 mkdir /var/log/kubedom
+chmod 1700 /opt/kubedom/customer-node-manager/start-worker-node.sh
 echo '\n'
 
 # TODO install to python virtualenv

@@ -38,7 +38,7 @@ public class MasterCreationResponseHandler implements IHandler {
                 .setType(CustomerNodeType.MASTER)
                 .setReady(true);
         customerNodeService.update(customerNode);
-        kubeClusterService.updateClusterStatus(customerNode.getKubeCluster());
+        kubeClusterService.updateClusterStatus(customerNode.getKubeClusterId());
     }
 
     private String replaceKubeApiServerIp(String originalKubeConfig, String ip) {

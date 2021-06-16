@@ -36,7 +36,7 @@ public class KubeCluster implements IEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "kubeCluster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "kubeCluster", fetch = FetchType.EAGER)
     private List<CustomerNode> nodes;
 
     @ManyToOne

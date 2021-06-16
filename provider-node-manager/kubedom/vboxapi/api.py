@@ -1,4 +1,5 @@
 import logging
+import time
 
 import virtualbox
 from bash import bash
@@ -53,6 +54,7 @@ def start(machine_name):
 def remove(machine_name):
     machine = vbox.find_machine(machine_name)
     poweroff_vm(machine_name)
+    time.sleep(10)
     machine.unregister(cleanup_mode=CleanupMode(4))
 
 

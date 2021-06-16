@@ -24,7 +24,7 @@ public class WorkerCreationResponseHandler implements IHandler {
                 .setType(CustomerNodeType.WORKER)
                 .setReady(true);
         customerNodeService.update(customerNode);
-        kubeClusterService.updateClusterStatus(customerNode.getKubeCluster());
+        kubeClusterService.updateClusterStatus(customerNode.getKubeClusterId());
     }
 
     @Override

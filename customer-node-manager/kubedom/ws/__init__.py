@@ -8,6 +8,7 @@ import os
 __MTYPE = 'type'
 __MDATA = 'data'
 __NODE_ID = 'customerNodeId'
+__START_WORKER_SCRIPT_PATH = '/opt/kubedom/customer-node-manager/start-worker-node.sh'
 
 
 async def consumer_handler(websocket: websockets.WebSocketClientProtocol) -> None:
@@ -78,7 +79,8 @@ def __master_creation(external_ip: str, node_name: str):
 
 
 def __worker_creation(master_ip: str, master_token: str, node_name: str):
-    command = f'curl -sfL https://get.k3s.io | sh -s - agent --token {master_token} --server https://{master_ip}:6443 --node-name {node_name}'
+    master_url = f'https://{master_ip}:6443'
+    command = f'{__START_WORKER_SCRIPT_PATH} {master_url} {master_token} {node_name}'.rstrip()
     __execute_command(command)
 #     TODO check status
 

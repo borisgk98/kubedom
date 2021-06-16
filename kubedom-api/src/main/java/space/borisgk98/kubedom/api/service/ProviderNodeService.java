@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import space.borisgk98.kubedom.api.model.dto.rest.ProviderNodeSearchRequest;
 import space.borisgk98.kubedom.api.model.entity.CurrWebSocketSession;
 import space.borisgk98.kubedom.api.model.entity.AppUser;
+import space.borisgk98.kubedom.api.model.entity.KubeCluster;
 import space.borisgk98.kubedom.api.model.entity.ProviderNode;
 import space.borisgk98.kubedom.api.model.enums.ProviderNodeState;
 import space.borisgk98.kubedom.api.model.enums.ProviderNodeType;
@@ -81,5 +82,9 @@ public class ProviderNodeService extends AbstractCrudService<ProviderNode, Long>
                 .filter(node -> Objects.equals(node.getType(), searchRequest.getProviderNodeType()))
                 .filter(node -> Objects.equals(node.getProviderNodeState(), searchRequest.getProviderNodeState()))
                 .collect(Collectors.toList());
+    }
+
+    public List<ProviderNode> findByOwnerId(Long userId) {
+        return ((ProviderNodeRepo) repository).findAllByOwnerId(userId);
     }
 }

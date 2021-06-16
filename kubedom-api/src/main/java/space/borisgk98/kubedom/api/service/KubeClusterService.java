@@ -83,8 +83,8 @@ public class KubeClusterService {
         return kubeClusterRepo.save(cluster);
     }
 
-    public void updateClusterStatus(KubeCluster kubeCluster) {
-        kubeCluster = kubeClusterRepo.getById(kubeCluster.getId());
+    public void updateClusterStatus(Long kubeClusterId) {
+        var kubeCluster = kubeClusterRepo.getById(kubeClusterId);
         if (kubeCluster.getNodes().stream().allMatch(CustomerNode::isReady)) {
             kubeCluster.setStatus(KubeClusterStatus.READY);
             kubeClusterRepo.save(kubeCluster);
@@ -97,5 +97,13 @@ public class KubeClusterService {
             customerNodeService.delete(node.getId());
         }
         kubeClusterRepo.delete(kubeCluster);
+    }
+
+    public KubeCluster read(Long clusterId) {
+        return kubeClusterRepo.getById(clusterId);
+    }
+
+    public List<KubeCluster> findByOwnerId(Long userId) {
+        return kubeClusterRepo.findAllByOwnerId(userId);
     }
 }
